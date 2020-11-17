@@ -3,8 +3,8 @@
 
 # IDE
 .idea
+venv
 __pycache__
-
 
 # latex 
 .texpadtmp
@@ -14,3 +14,5 @@ __pycache__
 *.blg
 *.synctex.gz
 
+# other
+res/tensorflow
