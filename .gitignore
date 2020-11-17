@@ -1,0 +1,16 @@
+# System 
+.DS_Store
+
+# IDE
+.idea
+__pycache__
+
+
+# latex 
+.texpadtmp
+*.aux
+*.log
+*.bbl
+*.blg
+*.synctex.gz
+
