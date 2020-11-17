@@ -11,8 +11,8 @@ class Visitor(NodeVisitor):
         self.visit(parse(node))
 
     def visit_ClassDef(self, node: ClassDef):
+        self.generic_visit(node)
         if is_valid_entity(node.name):
-            self.generic_visit(node)
             self.append_data(node, "class")
 
     def visit_FunctionDef(self, node: FunctionDef):
@@ -41,8 +41,6 @@ def start(directory_path):
                     Visitor(file_path, file.read())
 
     dataframe = pd.DataFrame(data=data, columns=["name", "file", "line", "type", "comment"])
-    print(dataframe)
-
     dataframe.to_csv('res/data.csv')
 
 
