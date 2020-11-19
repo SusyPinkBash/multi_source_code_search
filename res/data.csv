@@ -1,57 +1,57 @@
 ,name,file,line,type,comment
-0,UserInputError,./tensorflow//configure.py,74,class,
-1,is_windows,./tensorflow//configure.py,78,function,
-2,is_linux,./tensorflow//configure.py,82,function,
-3,is_macos,./tensorflow//configure.py,86,function,
-4,is_ppc64le,./tensorflow//configure.py,90,function,
-5,is_cygwin,./tensorflow//configure.py,94,function,
-6,get_input,./tensorflow//configure.py,98,function,
-7,symlink_force,./tensorflow//configure.py,109,function,"Force symlink, equivalent of 'ln -sf'."
-8,sed_in_place,./tensorflow//configure.py,126,function,Replace old string with new string in file.
-9,write_to_bazelrc,./tensorflow//configure.py,141,function,
-10,write_action_env_to_bazelrc,./tensorflow//configure.py,146,function,
-11,run_shell,./tensorflow//configure.py,150,function,
-12,cygpath,./tensorflow//configure.py,163,function,Convert path from posix to windows.
-13,get_python_path,./tensorflow//configure.py,168,function,Get the python site package paths.
-14,get_python_major_version,./tensorflow//configure.py,198,function,Get the python major version.
-15,setup_python,./tensorflow//configure.py,203,function,Setup python related env variables.
-16,reset_tf_configure_bazelrc,./tensorflow//configure.py,273,function,Reset file that contains customized config settings.
-17,cleanup_makefile,./tensorflow//configure.py,278,function,Delete any leftover BUILD files from the Makefile build.
-18,get_var,./tensorflow//configure.py,292,function,Get boolean input from user.
-19,set_build_var,./tensorflow//configure.py,377,function,Set if query_item will be enabled for the build.
-20,set_action_env_var,./tensorflow//configure.py,411,function,Set boolean action_env variable.
-21,convert_version_to_int,./tensorflow//configure.py,446,function,Convert a version number to a integer that can be used to compare.
-22,check_bazel_version,./tensorflow//configure.py,471,function,Check installed bazel version is between min_version and max_version.
-23,set_cc_opt_flags,./tensorflow//configure.py,518,function,Set up architecture-dependent optimization flags.
-24,set_tf_cuda_clang,./tensorflow//configure.py,546,function,set TF_CUDA_CLANG action_env.
-25,set_tf_download_clang,./tensorflow//configure.py,566,function,Set TF_DOWNLOAD_CLANG action_env.
-26,get_from_env_or_user_or_default,./tensorflow//configure.py,582,function,"Get var_name either from env, or user or default."
-27,set_clang_cuda_compiler_path,./tensorflow//configure.py,607,function,Set CLANG_CUDA_COMPILER_PATH.
-28,prompt_loop_or_load_from_env,./tensorflow//configure.py,630,function,Loop over user prompts for an ENV param until receiving a valid response.
-29,create_android_ndk_rule,./tensorflow//configure.py,696,function,Set ANDROID_NDK_HOME and write Android NDK WORKSPACE rule.
-30,create_android_sdk_rule,./tensorflow//configure.py,724,function,Set Android variables and write Android SDK WORKSPACE rule.
-31,get_ndk_api_level,./tensorflow//configure.py,788,function,Gets the appropriate NDK API level to use for the provided Android NDK path.
-32,set_gcc_host_compiler_path,./tensorflow//configure.py,836,function,Set GCC_HOST_COMPILER_PATH.
-33,reformat_version_sequence,./tensorflow//configure.py,858,function,Reformat the version string to have the given number of sequences.
-34,set_tf_cuda_paths,./tensorflow//configure.py,881,function,Set TF_CUDA_PATHS.
-35,set_tf_cuda_version,./tensorflow//configure.py,892,function,Set TF_CUDA_VERSION.
-36,set_tf_cudnn_version,./tensorflow//configure.py,904,function,Set TF_CUDNN_VERSION.
-37,is_cuda_compatible,./tensorflow//configure.py,916,function,Check compatibility between given library and cudnn/cudart libraries.
-38,set_tf_tensorrt_version,./tensorflow//configure.py,945,function,Set TF_TENSORRT_VERSION.
-39,set_tf_nccl_version,./tensorflow//configure.py,962,function,Set TF_NCCL_VERSION.
-40,get_native_cuda_compute_capabilities,./tensorflow//configure.py,979,function,Get native cuda compute capabilities.
-41,set_tf_cuda_compute_capabilities,./tensorflow//configure.py,1003,function,Set TF_CUDA_COMPUTE_CAPABILITIES.
-42,set_other_cuda_vars,./tensorflow//configure.py,1074,function,Set other CUDA related variables.
-43,set_host_cxx_compiler,./tensorflow//configure.py,1083,function,Set HOST_CXX_COMPILER.
-44,set_host_c_compiler,./tensorflow//configure.py,1100,function,Set HOST_C_COMPILER.
-45,set_computecpp_toolkit_path,./tensorflow//configure.py,1117,function,Set COMPUTECPP_TOOLKIT_PATH.
-46,set_trisycl_include_dir,./tensorflow//configure.py,1149,function,Set TRISYCL_INCLUDE_DIR.
-47,set_system_libs_flag,./tensorflow//configure.py,1216,function,
-48,is_reduced_optimize_huge_functions_available,./tensorflow//configure.py,1233,function,Check to see if the system supports /d2ReducedOptimizeHugeFunctions.
-49,set_windows_build_flags,./tensorflow//configure.py,1262,function,Set Windows specific build options.
-50,config_info_line,./tensorflow//configure.py,1283,function,Helper function to print formatted help text for Bazel config options.
-51,configure_ios,./tensorflow//configure.py,1288,function,Configures TensorFlow for iOS builds.
-52,validate_cuda_config,./tensorflow//configure.py,1305,function,"Run find_cuda_config.py and return cuda_toolkit_path, or None."
+0,UserInputError,./tensorflow/configure.py,74,class,
+1,is_windows,./tensorflow/configure.py,78,function,
+2,is_linux,./tensorflow/configure.py,82,function,
+3,is_macos,./tensorflow/configure.py,86,function,
+4,is_ppc64le,./tensorflow/configure.py,90,function,
+5,is_cygwin,./tensorflow/configure.py,94,function,
+6,get_input,./tensorflow/configure.py,98,function,
+7,symlink_force,./tensorflow/configure.py,109,function,"Force symlink, equivalent of 'ln -sf'."
+8,sed_in_place,./tensorflow/configure.py,126,function,Replace old string with new string in file.
+9,write_to_bazelrc,./tensorflow/configure.py,141,function,
+10,write_action_env_to_bazelrc,./tensorflow/configure.py,146,function,
+11,run_shell,./tensorflow/configure.py,150,function,
+12,cygpath,./tensorflow/configure.py,163,function,Convert path from posix to windows.
+13,get_python_path,./tensorflow/configure.py,168,function,Get the python site package paths.
+14,get_python_major_version,./tensorflow/configure.py,198,function,Get the python major version.
+15,setup_python,./tensorflow/configure.py,203,function,Setup python related env variables.
+16,reset_tf_configure_bazelrc,./tensorflow/configure.py,273,function,Reset file that contains customized config settings.
+17,cleanup_makefile,./tensorflow/configure.py,278,function,Delete any leftover BUILD files from the Makefile build.
+18,get_var,./tensorflow/configure.py,292,function,Get boolean input from user.
+19,set_build_var,./tensorflow/configure.py,377,function,Set if query_item will be enabled for the build.
+20,set_action_env_var,./tensorflow/configure.py,411,function,Set boolean action_env variable.
+21,convert_version_to_int,./tensorflow/configure.py,446,function,Convert a version number to a integer that can be used to compare.
+22,check_bazel_version,./tensorflow/configure.py,471,function,Check installed bazel version is between min_version and max_version.
+23,set_cc_opt_flags,./tensorflow/configure.py,518,function,Set up architecture-dependent optimization flags.
+24,set_tf_cuda_clang,./tensorflow/configure.py,546,function,set TF_CUDA_CLANG action_env.
+25,set_tf_download_clang,./tensorflow/configure.py,566,function,Set TF_DOWNLOAD_CLANG action_env.
+26,get_from_env_or_user_or_default,./tensorflow/configure.py,582,function,"Get var_name either from env, or user or default."
+27,set_clang_cuda_compiler_path,./tensorflow/configure.py,607,function,Set CLANG_CUDA_COMPILER_PATH.
+28,prompt_loop_or_load_from_env,./tensorflow/configure.py,630,function,Loop over user prompts for an ENV param until receiving a valid response.
+29,create_android_ndk_rule,./tensorflow/configure.py,696,function,Set ANDROID_NDK_HOME and write Android NDK WORKSPACE rule.
+30,create_android_sdk_rule,./tensorflow/configure.py,724,function,Set Android variables and write Android SDK WORKSPACE rule.
+31,get_ndk_api_level,./tensorflow/configure.py,788,function,Gets the appropriate NDK API level to use for the provided Android NDK path.
+32,set_gcc_host_compiler_path,./tensorflow/configure.py,836,function,Set GCC_HOST_COMPILER_PATH.
+33,reformat_version_sequence,./tensorflow/configure.py,858,function,Reformat the version string to have the given number of sequences.
+34,set_tf_cuda_paths,./tensorflow/configure.py,881,function,Set TF_CUDA_PATHS.
+35,set_tf_cuda_version,./tensorflow/configure.py,892,function,Set TF_CUDA_VERSION.
+36,set_tf_cudnn_version,./tensorflow/configure.py,904,function,Set TF_CUDNN_VERSION.
+37,is_cuda_compatible,./tensorflow/configure.py,916,function,Check compatibility between given library and cudnn/cudart libraries.
+38,set_tf_tensorrt_version,./tensorflow/configure.py,945,function,Set TF_TENSORRT_VERSION.
+39,set_tf_nccl_version,./tensorflow/configure.py,962,function,Set TF_NCCL_VERSION.
+40,get_native_cuda_compute_capabilities,./tensorflow/configure.py,979,function,Get native cuda compute capabilities.
+41,set_tf_cuda_compute_capabilities,./tensorflow/configure.py,1003,function,Set TF_CUDA_COMPUTE_CAPABILITIES.
+42,set_other_cuda_vars,./tensorflow/configure.py,1074,function,Set other CUDA related variables.
+43,set_host_cxx_compiler,./tensorflow/configure.py,1083,function,Set HOST_CXX_COMPILER.
+44,set_host_c_compiler,./tensorflow/configure.py,1100,function,Set HOST_C_COMPILER.
+45,set_computecpp_toolkit_path,./tensorflow/configure.py,1117,function,Set COMPUTECPP_TOOLKIT_PATH.
+46,set_trisycl_include_dir,./tensorflow/configure.py,1149,function,Set TRISYCL_INCLUDE_DIR.
+47,set_system_libs_flag,./tensorflow/configure.py,1216,function,
+48,is_reduced_optimize_huge_functions_available,./tensorflow/configure.py,1233,function,Check to see if the system supports /d2ReducedOptimizeHugeFunctions.
+49,set_windows_build_flags,./tensorflow/configure.py,1262,function,Set Windows specific build options.
+50,config_info_line,./tensorflow/configure.py,1283,function,Helper function to print formatted help text for Bazel config options.
+51,configure_ios,./tensorflow/configure.py,1288,function,Configures TensorFlow for iOS builds.
+52,validate_cuda_config,./tensorflow/configure.py,1305,function,"Run find_cuda_config.py and return cuda_toolkit_path, or None."
 53,ConfigError,./tensorflow/third_party/gpus/check_cuda_libs.py,38,class,
 54,check_cuda_lib,./tensorflow/third_party/gpus/check_cuda_libs.py,46,function,Tests if a library exists on disk and whether its soname matches the filename.
 55,ConfigError,./tensorflow/third_party/gpus/find_cuda_config.py,72,class,
