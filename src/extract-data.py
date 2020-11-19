@@ -17,11 +17,12 @@ class Visitor(NodeVisitor):
 
     def visit_FunctionDef(self, node: FunctionDef):
         if is_valid_entity(node.name):
-            self.generic_visit(node)
             self.append_data(node, "method" if is_method(node) else "function")
 
     def append_data(self, node, def_type):
-        data.append((node.name, self.file_path, node.lineno, def_type, get_docstring(node)))
+        comment = get_docstring(node)
+        comment = get_docstring(node).split('\n')[0] if comment is not None else ""
+        data.append((node.name, self.file_path, node.lineno, def_type, comment))
 
 
 def is_valid_entity(name):
