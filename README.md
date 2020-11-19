@@ -3,10 +3,13 @@
 ### Project 2: Multi-source code search
 #### Run the project with scripts
 To run the project use the command:
-    `sh run.sh path_to_tensorflow_directory`
+    `sh run.sh path_to_tensorflow_directory "query"`
    
     
  #### Run single files
 Extract data:
 * `python3 src/extract-data.py path_to_tensorflow_directory`
+
+Search data:
+* `python3 src/search-data.py "query"`
 

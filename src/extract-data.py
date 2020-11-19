@@ -34,6 +34,8 @@ def is_method(function):
 
 
 def start(directory_path):
+    if directory_path[-1] == '/':
+        directory_path = directory_path[: -1]
     for path, _, files in walk(directory_path):
         for file_name in files:
             if file_name.endswith('.py'):
