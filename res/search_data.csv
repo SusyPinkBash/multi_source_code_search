@@ -9,8 +9,8 @@ algorithm,./tensorflow/tensorflow/python/ops/stateful_random_ops.py,558,method,T
 Adadelta,./tensorflow/tensorflow/python/keras/optimizers.py,383,class,Adadelta optimizer.,TF-IDF
 AdadeltaOptimizer,./tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,TF-IDF
 Adadelta,./tensorflow/tensorflow/python/keras/optimizer_v2/adadelta.py,32,class,Optimizer that implements the Adadelta algorithm.,TF-IDF
+AdadeltaOptimizer,./tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,LSI
 Optimizer,./tensorflow/tensorflow/python/keras/optimizers.py,47,class,Abstract optimizer base class.,LSI
 Optimizer,./tensorflow/tensorflow/python/training/optimizer.py,217,class,Base class for optimizers.,LSI
 MomentumOptimizer,./tensorflow/tensorflow/python/training/momentum.py,29,class,Optimizer that implements the Momentum algorithm.,LSI
-AdadeltaOptimizer,./tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,LSI
-FtrlOptimizer,./tensorflow/tensorflow/python/training/ftrl.py,29,class,Optimizer that implements the FTRL algorithm.,LSI
+optimizer_jit,./tensorflow/tensorflow/python/eager/context.py,1509,method,,LSI

@@ -9,7 +9,6 @@ from gensim.similarities import MatrixSimilarity, SparseMatrixSimilarity
 
 def start(query):
     dataframe = load_csv()
-    results = pd.DataFrame(data=[], columns=['name', "file", "line", "type", "comment", "search"])
     processed_corpus, frequencies, bag_of_words = create_corpus(dataframe)
     query_to_execute = normalize_query(argv[1])
     results_dictionary = {
@@ -18,7 +17,8 @@ def start(query):
         "LSI": query_lsi(query_to_execute, bag_of_words, frequencies),
         # "Doc2Vec": query_doc2vec(query_to_execute, processed_corpus)
     }
-    print_queries(results_dictionary, dataframe, results)
+    data = print_queries(results_dictionary, dataframe)
+    results = pd.DataFrame(data=data, columns=['name', "file", "line", "type", "comment", "search"])
     results.to_csv('res/search_data.csv', index=False, encoding='utf-8')
 
 
@@ -89,16 +89,17 @@ def query_doc2vec(query, corpus):
     return "TODO"
 
 
-def print_queries(queries_dictionary, df, res):
+def print_queries(queries_dictionary, df):
+    results = []
     for key, values in queries_dictionary.items():
         print(key)
         for index, value in sorted(enumerate(values), key=lambda x: x[1], reverse=True)[:5]:
             print("document:", index)
             row = df.iloc[index]
-            res.loc[-1] = [row["name"], row["file"], row["line"], row["type"], row["comment"], key]
-            res.index = res.index + 1
+            results.append([row["name"], row["file"], row["line"], row["type"], row["comment"], key])
             print(row, value, '\n')
     print()
+    return results
 
 
 if len(argv) < 2:
