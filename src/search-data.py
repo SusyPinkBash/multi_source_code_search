@@ -3,7 +3,9 @@ from sys import argv, exit
 import pandas as pd
 from collections import defaultdict
 from gensim.corpora import Dictionary
-from gensim.models import TfidfModel, LsiModel, doc2vec
+from gensim.models.doc2vec import TaggedDocument
+from gensim.utils import simple_preprocess
+from gensim.models import TfidfModel, LsiModel, Doc2Vec
 from gensim.similarities import MatrixSimilarity, SparseMatrixSimilarity
 
 
@@ -15,7 +17,7 @@ def start(query):
         "FREQ": query_frequency(query_to_execute, bag_of_words, frequencies),
         "TF-IDF": query_tfidf(query_to_execute, bag_of_words, frequencies),
         "LSI": query_lsi(query_to_execute, bag_of_words, frequencies),
-        # "Doc2Vec": query_doc2vec(query_to_execute, processed_corpus)
+        "Doc2Vec": query_doc2vec(query_to_execute, processed_corpus)
     }
     data = print_queries(results_dictionary, dataframe)
     results = pd.DataFrame(data=data, columns=['name', "file", "line", "type", "comment", "search"])
@@ -86,7 +88,21 @@ def query_lsi(query, bow, dictionary):
 
 
 def query_doc2vec(query, corpus):
-    return "TODO"
+    doc2vec_corpus = get_doc2vec_read_corpus(corpus)
+    doc2vec_model = get_doc2vec_model(doc2vec_corpus)
+    return doc2vec_model.docvecs.most_similar([doc2vec_model.infer_vector(query)], topn=5)
+
+
+def get_doc2vec_read_corpus(corpus):
+    return [TaggedDocument(simple_preprocess(' '.join(element)), [index])
+            for index, element in enumerate(corpus)]
+
+
+def get_doc2vec_model(corpus):
+    model = Doc2Vec(vector_size=300, min_count=2, epochs=40)
+    model.build_vocab(corpus)
+    model.train(corpus, total_examples=model.corpus_count, epochs=model.epochs)
+    return model
 
 
 def print_queries(queries_dictionary, df):
