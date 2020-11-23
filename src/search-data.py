@@ -2,30 +2,24 @@ from re import finditer
 from sys import argv, exit
 import pandas as pd
 from collections import defaultdict
-from gensim import corpora, models, similarities
+from gensim.corpora import Dictionary
+from gensim.models import TfidfModel, LsiModel, doc2vec
+from gensim.similarities import MatrixSimilarity, SparseMatrixSimilarity
 
 
-def handle_camel_case(tokens):
-    words = []
-    for token in tokens:
-        matches = finditer('.+?(?:(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|$)', token)
-        words += [m.group(0) for m in matches]
-    return words
-
-
-def filter_stopwords(tokens):
-    for token in tokens:
-        if token in ['test', 'tests', 'main']:
-            return []
-    return tokens
-
-
-def normalize_tokens(tokens):
-    return [token.lower() for token in tokens]
-
-
-def split_underscore(tokens):
-    return [word for token in tokens for word in token.split('_')]
+def start(query):
+    dataframe = load_csv()
+    results = pd.DataFrame(data=[], columns=['name', "file", "line", "type", "comment", "search"])
+    processed_corpus, frequencies, bag_of_words = create_corpus(dataframe)
+    query_to_execute = normalize_query(argv[1])
+    results_dictionary = {
+        "FREQ": query_frequency(query_to_execute, bag_of_words, frequencies),
+        "TF-IDF": query_tfidf(query_to_execute, bag_of_words, frequencies),
+        "LSI": query_lsi(query_to_execute, bag_of_words, frequencies),
+        # "Doc2Vec": query_doc2vec(query_to_execute, processed_corpus)
+    }
+    print_queries(results_dictionary, dataframe, results)
+    results.to_csv('res/search_data.csv', index=False, encoding='utf-8')
 
 
 def load_csv():
@@ -44,35 +38,73 @@ def create_corpus(df):
             frequency[word] += 1
 
     processed = [[token for token in text if frequency[token] > 1] for text in tokens]
-    dictionary = corpora.Dictionary(processed)
+    dictionary = Dictionary(processed)
     bow = [dictionary.doc2bow(text) for text in processed]
 
     return processed, dictionary, bow
+
+
+def split_underscore(tokens):
+    return [word for token in tokens for word in token.split('_')]
+
+
+def handle_camel_case(tokens):
+    words = []
+    for token in tokens:
+        matches = finditer('.+?(?:(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|$)', token)
+        words += [m.group(0) for m in matches]
+    return words
+
+
+def normalize_tokens(tokens):
+    return [token.lower() for token in tokens]
+
+
+def filter_stopwords(tokens):
+    for token in tokens:
+        if token in ['test', 'tests', 'main']:
+            return []
+    return tokens
 
 
 def normalize_query(query):
     return query.strip().lower().split()
 
 
-def query_tfidf(query, bow, dictionary, df):
-    model = models.TfidfModel(bow)
-    corpus = model[bow]
-    index = similarities.SparseMatrixSimilarity(corpus, num_features=len(dictionary.token2id))
+def query_frequency(query, bow, dictionary):
+    return SparseMatrixSimilarity(bow, num_features=len(dictionary.token2id))[dictionary.doc2bow(query)]
 
-    res = []
+
+def query_tfidf(query, bow, dictionary):
+    model = TfidfModel(bow)
+    return SparseMatrixSimilarity(model[bow], num_features=len(dictionary.token2id))[model[dictionary.doc2bow(query)]]
+
+
+def query_lsi(query, bow, dictionary):
+    model = LsiModel(bow, id2word=dictionary, num_topics=300)
+    return abs(MatrixSimilarity(model[bow])[model[dictionary.doc2bow(query)]])
+
+
+def query_doc2vec(query, corpus):
+    return "TODO"
+
+
+def print_queries(queries_dictionary, df, res):
+    for key, values in queries_dictionary.items():
+        print(key)
+        for index, value in sorted(enumerate(values), key=lambda x: x[1], reverse=True)[:5]:
+            print("document:", index)
+            row = df.iloc[index]
+            res.loc[-1] = [row["name"], row["file"], row["line"], row["type"], row["comment"], key]
+            res.index = res.index + 1
+            print(row, value, '\n')
     print()
-    print('TF-IDF:')
-    for i, score in sorted(enumerate(index[model[dictionary.doc2bow(query)]]), key=lambda x: x[1], reverse=True)[:5]:
-        print(df.iloc[i], score)
-        res.append(df.iloc[i])
-    return res
 
 
 if len(argv) < 2:
     print("Please give as input the query")
     exit(1)
 
-dataframe = load_csv()
-processed_corpus, frequencies, bag_of_words = create_corpus(dataframe)
-query_to_execute = normalize_query(argv[1])
-query_tfidf(query_to_execute, bag_of_words, frequencies, dataframe)
+
+start(argv[1])
+

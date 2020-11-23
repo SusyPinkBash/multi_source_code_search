@@ -44,7 +44,7 @@ def start(directory_path):
                     Visitor(file_path, file.read())
 
     dataframe = pd.DataFrame(data=data, columns=["name", "file", "line", "type", "comment"])
-    dataframe.to_csv('res/data.csv')
+    dataframe.to_csv('res/data.csv', index=False, encoding='utf-8')
 
 
 if len(argv) < 2:
