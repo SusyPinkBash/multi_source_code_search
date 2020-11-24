@@ -14,8 +14,8 @@ Optimizer,./tensorflow/tensorflow/python/training/optimizer.py,217,class,Base cl
 MomentumOptimizer,./tensorflow/tensorflow/python/training/momentum.py,29,class,Optimizer that implements the Momentum algorithm.,LSI
 AdadeltaOptimizer,./tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,LSI
 FtrlOptimizer,./tensorflow/tensorflow/python/training/ftrl.py,29,class,Optimizer that implements the FTRL algorithm.,LSI
-is_ppc64le,./tensorflow/configure.py,90,function,,Doc2Vec
-is_windows,./tensorflow/configure.py,78,function,,Doc2Vec
 is_linux,./tensorflow/configure.py,82,function,,Doc2Vec
+is_ppc64le,./tensorflow/configure.py,90,function,,Doc2Vec
 UserInputError,./tensorflow/configure.py,74,class,,Doc2Vec
+is_windows,./tensorflow/configure.py,78,function,,Doc2Vec
 is_macos,./tensorflow/configure.py,86,function,,Doc2Vec

@@ -19,8 +19,8 @@ def start(query):
         "LSI": query_lsi(query_to_execute, bag_of_words, frequencies),
         "Doc2Vec": query_doc2vec(query_to_execute, processed_corpus)
     }
-    data = print_queries(results_dictionary, dataframe)
-    results = pd.DataFrame(data=data, columns=['name', "file", "line", "type", "comment", "search"])
+    results = pd.DataFrame(data=print_queries(results_dictionary, dataframe),
+                           columns=['name', "file", "line", "type", "comment", "search"])
     results.to_csv('res/search_data.csv', index=False, encoding='utf-8')
 
 
@@ -88,9 +88,8 @@ def query_lsi(query, bow, dictionary):
 
 
 def query_doc2vec(query, corpus):
-    doc2vec_corpus = get_doc2vec_read_corpus(corpus)
-    doc2vec_model = get_doc2vec_model(doc2vec_corpus)
-    return doc2vec_model.docvecs.most_similar([doc2vec_model.infer_vector(query)], topn=5)
+    model = get_doc2vec_model(get_doc2vec_read_corpus(corpus))
+    return model.docvecs.most_similar([model.infer_vector(query)], topn=5)
 
 
 def get_doc2vec_read_corpus(corpus):
@@ -99,7 +98,7 @@ def get_doc2vec_read_corpus(corpus):
 
 
 def get_doc2vec_model(corpus):
-    model = Doc2Vec(vector_size=300, min_count=2, epochs=40)
+    model = Doc2Vec(vector_size=50, min_count=2, epochs=40)
     model.build_vocab(corpus)
     model.train(corpus, total_examples=model.corpus_count, epochs=model.epochs)
     return model
