@@ -14,14 +14,14 @@ def start(query):
     processed_corpus, frequencies, bag_of_words = create_corpus(dataframe)
     query_to_execute = normalize_query(argv[1])
     results_dictionary = {
-        "FREQ": query_frequency(query_to_execute, bag_of_words, frequencies),
-        "TF-IDF": query_tfidf(query_to_execute, bag_of_words, frequencies),
-        "LSI": query_lsi(query_to_execute, bag_of_words, frequencies),
+        "FREQ": filter_results(query_frequency(query_to_execute, bag_of_words, frequencies)),
+        "TF-IDF": filter_results(query_tfidf(query_to_execute, bag_of_words, frequencies)),
+        "LSI": filter_results(query_lsi(query_to_execute, bag_of_words, frequencies)),
         "Doc2Vec": query_doc2vec(query_to_execute, processed_corpus)
     }
     results = pd.DataFrame(data=print_queries(results_dictionary, dataframe),
                            columns=['name', "file", "line", "type", "comment", "search"])
-    results.to_csv('res/search_data.csv', index=False, encoding='utf-8')
+    results .to_csv('res/search_data.csv', index=False, encoding='utf-8')
 
 
 def load_csv():
@@ -29,10 +29,8 @@ def load_csv():
 
 
 def create_corpus(df):
-    tokens = []
-    for _, row in df.iterrows():
-        tokens.append(filter_stopwords(normalize_tokens(handle_camel_case(split_underscore(
-            [row["name"], row["comment"]])))))
+    tokens = [filter_stopwords(normalize_tokens(handle_camel_case(split_underscore(
+        [row["name"], row["comment"]])))) for _, row in df.iterrows()]
 
     frequency = defaultdict(int)
     for token in tokens:
@@ -87,9 +85,13 @@ def query_lsi(query, bow, dictionary):
     return abs(MatrixSimilarity(model[bow])[model[dictionary.doc2bow(query)]])
 
 
+def filter_results(arrg):
+    return [i for i, v in sorted(enumerate(arrg), key=lambda x: x[1], reverse=True)[:5]]
+
+
 def query_doc2vec(query, corpus):
     model = get_doc2vec_model(get_doc2vec_read_corpus(corpus))
-    return model.docvecs.most_similar([model.infer_vector(query)], topn=5)
+    return [index for (index, _) in model.docvecs.most_similar([model.infer_vector(query)], topn=5)]
 
 
 def get_doc2vec_read_corpus(corpus):
@@ -105,16 +107,13 @@ def get_doc2vec_model(corpus):
 
 
 def print_queries(queries_dictionary, df):
-    results = []
     for key, values in queries_dictionary.items():
         print(key)
-        for index, value in sorted(enumerate(values), key=lambda x: x[1], reverse=True)[:5]:
-            print("document:", index)
+        for index in sorted(values):
             row = df.iloc[index]
-            results.append([row["name"], row["file"], row["line"], row["type"], row["comment"], key])
-            print(row, value, '\n')
-    print()
-    return results
+            print("\tdocument:", row["name"])
+            yield [row["name"], row["file"], row["line"], row["type"], row["comment"], key]
+        print()
 
 
 if len(argv) < 2:
