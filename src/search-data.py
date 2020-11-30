@@ -30,7 +30,7 @@ def load_csv():
 
 def create_corpus(df):
     tokens = [filter_stopwords(normalize_tokens(handle_camel_case(split_underscore(
-        [row["name"], row["comment"]])))) for _, row in df.iterrows()]
+        [row["name"]] + split_space(row["comment"]))))) for _, row in df.iterrows()]
 
     frequency = defaultdict(int)
     for token in tokens:
@@ -42,6 +42,10 @@ def create_corpus(df):
     bow = [dictionary.doc2bow(text) for text in processed]
 
     return processed, dictionary, bow
+
+
+def split_space(text):
+    return text.split(' ')
 
 
 def split_underscore(tokens):
@@ -111,7 +115,8 @@ def print_queries(queries_dictionary, df):
         print(key)
         for index in sorted(values):
             row = df.iloc[index]
-            print("\tdocument:", row["name"])
+            print("document:", index)
+            print(row, '\n')
             yield [row["name"], row["file"], row["line"], row["type"], row["comment"], key]
         print()
 

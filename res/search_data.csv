@@ -1,21 +1,21 @@
 name,file,line,type,comment,search
-Optimizer,./tensorflow/tensorflow/python/keras/optimizers.py,47,class,Abstract optimizer base class.,FREQ
-Adadelta,./tensorflow/tensorflow/python/keras/optimizers.py,383,class,Adadelta optimizer.,FREQ
-Optimizer,./tensorflow/tensorflow/python/training/optimizer.py,217,class,Base class for optimizers.,FREQ
-MomentumOptimizer,./tensorflow/tensorflow/python/training/momentum.py,29,class,Optimizer that implements the Momentum algorithm.,FREQ
+Adadelta,./tensorflow/tensorflow/python/keras/optimizer_v2/adadelta.py,32,class,Optimizer that implements the Adadelta algorithm.,FREQ
+FtrlOptimizer,./tensorflow/tensorflow/python/training/ftrl.py,29,class,Optimizer that implements the FTRL algorithm.,FREQ
+AdagradOptimizer,./tensorflow/tensorflow/python/training/adagrad.py,32,class,Optimizer that implements the Adagrad algorithm.,FREQ
+AdamOptimizer,./tensorflow/tensorflow/python/training/adam.py,32,class,Optimizer that implements the Adam algorithm.,FREQ
 AdadeltaOptimizer,./tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,FREQ
 Adadelta,./tensorflow/tensorflow/python/keras/optimizers.py,383,class,Adadelta optimizer.,TF-IDF
 Adadelta,./tensorflow/tensorflow/python/keras/optimizer_v2/adadelta.py,32,class,Optimizer that implements the Adadelta algorithm.,TF-IDF
+RMSPropOptimizer,./tensorflow/tensorflow/python/training/rmsprop.py,54,class,Optimizer that implements the RMSProp algorithm (Tielemans et al.,TF-IDF
 AdadeltaOptimizer,./tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,TF-IDF
 Algorithm,./tensorflow/tensorflow/python/ops/stateful_random_ops.py,67,class,,TF-IDF
-algorithm,./tensorflow/tensorflow/python/ops/stateful_random_ops.py,558,method,The RNG algorithm id (a Python integer or scalar integer Tensor).,TF-IDF
-Optimizer,./tensorflow/tensorflow/python/keras/optimizers.py,47,class,Abstract optimizer base class.,LSI
-FtrlOptimizer,./tensorflow/tensorflow/python/training/ftrl.py,29,class,Optimizer that implements the FTRL algorithm.,LSI
-Optimizer,./tensorflow/tensorflow/python/training/optimizer.py,217,class,Base class for optimizers.,LSI
-MomentumOptimizer,./tensorflow/tensorflow/python/training/momentum.py,29,class,Optimizer that implements the Momentum algorithm.,LSI
-AdadeltaOptimizer,./tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,LSI
-Ftrl,./tensorflow/tensorflow/python/keras/optimizer_v2/ftrl.py,30,class,Optimizer that implements the FTRL algorithm.,Doc2Vec
-Adadelta,./tensorflow/tensorflow/python/keras/optimizer_v2/adadelta.py,32,class,Optimizer that implements the Adadelta algorithm.,Doc2Vec
-FtrlOptimizer,./tensorflow/tensorflow/python/training/ftrl.py,29,class,Optimizer that implements the FTRL algorithm.,Doc2Vec
+RMSprop,./tensorflow/tensorflow/python/keras/optimizer_v2/rmsprop.py,35,class,Optimizer that implements the RMSprop algorithm.,LSI
+Adamax,./tensorflow/tensorflow/python/keras/optimizer_v2/adamax.py,33,class,Optimizer that implements the Adamax algorithm.,LSI
+Ftrl,./tensorflow/tensorflow/python/keras/optimizer_v2/ftrl.py,30,class,Optimizer that implements the FTRL algorithm.,LSI
+Adam,./tensorflow/tensorflow/python/keras/optimizer_v2/adam.py,34,class,Optimizer that implements the Adam algorithm.,LSI
+Adadelta,./tensorflow/tensorflow/python/keras/optimizer_v2/adadelta.py,32,class,Optimizer that implements the Adadelta algorithm.,LSI
+non_trainable_weights,./tensorflow/tensorflow/python/keras/engine/training.py,1910,method,,Doc2Vec
 AdagradOptimizer,./tensorflow/tensorflow/python/training/adagrad.py,32,class,Optimizer that implements the Adagrad algorithm.,Doc2Vec
-AdadeltaOptimizer,./tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,Doc2Vec
+AdamOptimizer,./tensorflow/tensorflow/python/training/adam.py,32,class,Optimizer that implements the Adam algorithm.,Doc2Vec
+dtype,./tensorflow/tensorflow/python/ops/resource_variable_ops.py,520,method,The dtype of this variable.,Doc2Vec
+optimizer_jit,./tensorflow/tensorflow/python/eager/context.py,1515,method,,Doc2Vec
