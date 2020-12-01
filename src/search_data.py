@@ -9,23 +9,34 @@ from gensim.models import TfidfModel, LsiModel, Doc2Vec
 from gensim.similarities import MatrixSimilarity, SparseMatrixSimilarity
 
 
+def get_results(query, dataframe):
+    results_dictionary = compute_results(query, dataframe)
+    return pd.DataFrame(data=create_result_dataframe(results_dictionary, dataframe),
+                        columns=['name', "file", "line", "type", "comment", "search"])
+
+
 def start(query):
-    dataframe = load_csv()
+    dataframe = load_csv("res/data.csv")
+    results_dictionary = compute_results(query, dataframe)
+    results = pd.DataFrame(data=print_queries(results_dictionary, dataframe),
+                           columns=['name', "file", "line", "type", "comment", "search"])
+    results.to_csv('res/search_data.csv', index=False, encoding='utf-8')
+
+
+def compute_results(query, dataframe):
     processed_corpus, frequencies, bag_of_words = create_corpus(dataframe)
-    query_to_execute = normalize_query(argv[1])
+    query_to_execute = normalize_query(query)
     results_dictionary = {
         "FREQ": filter_results(query_frequency(query_to_execute, bag_of_words, frequencies)),
         "TF-IDF": filter_results(query_tfidf(query_to_execute, bag_of_words, frequencies)),
         "LSI": filter_results(query_lsi(query_to_execute, bag_of_words, frequencies)),
         "Doc2Vec": query_doc2vec(query_to_execute, processed_corpus)
     }
-    results = pd.DataFrame(data=print_queries(results_dictionary, dataframe),
-                           columns=['name', "file", "line", "type", "comment", "search"])
-    results .to_csv('res/search_data.csv', index=False, encoding='utf-8')
+    return results_dictionary
 
 
-def load_csv():
-    return pd.read_csv("res/data.csv").fillna(value="")
+def load_csv(path):
+    return pd.read_csv(path).fillna(value="")
 
 
 def create_corpus(df):
@@ -104,10 +115,17 @@ def get_doc2vec_read_corpus(corpus):
 
 
 def get_doc2vec_model(corpus):
-    model = Doc2Vec(vector_size=50, min_count=2, epochs=40)
+    model = Doc2Vec(vector_size=300, min_count=2, epochs=77)
     model.build_vocab(corpus)
     model.train(corpus, total_examples=model.corpus_count, epochs=model.epochs)
     return model
+
+
+def create_result_dataframe(queries_dictionary, df):
+    for key, values in queries_dictionary.items():
+        for index in sorted(values):
+            row = df.iloc[index]
+            yield [row["name"], row["file"], row["line"], row["type"], row["comment"], key]
 
 
 def print_queries(queries_dictionary, df):
@@ -125,6 +143,4 @@ if len(argv) < 2:
     print("Please give as input the query")
     exit(1)
 
-
 start(argv[1])
-

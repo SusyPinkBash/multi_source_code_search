@@ -1,0 +1,39 @@
+Optimizer that implements the Adadelta algorithm
+Adadelta
+../tensorflow/tensorflow/python/keras/optimizers.py
+
+Stochastic gradient descent and momentum optimizer
+SGD
+../tensorflow/tensorflow/python/keras/optimizers.py
+
+Computes the mean squared logarithmic error between y_true and y_pred
+MeanSquaredLogarithmicError
+../tensorflow/tensorflow/python/keras/losses.py
+
+Reverses variable length slices
+reverse_sequence
+../tensorflow/tensorflow/python/ops/array_ops.py
+
+Tensor contraction of a and b along specified axes
+tensordot
+../tensorflow/tensorflow/python/ops/math_ops.py
+
+Extracts a strided slice of a tensor generalized python array indexing
+strided_slice
+../tensorflow/tensorflow/python/ops/array_ops.py
+
+Represents the shape of a Tensor
+TensorShape
+../tensorflow/tensorflow/python/framework/tensor_shape.py
+
+Decorator to define a function with a custom gradient
+custom_gradient
+../tensorflow/tensorflow/python/ops/custom_gradient.py
+
+Layer normalization layer
+LayerNormalization
+../tensorflow/tensorflow/python/keras/layers/normalization.py
+
+loss function
+get_loss_function
+../tensorflow/tensorflow/python/keras/engine/training_utils.py
