@@ -9,11 +9,6 @@ from gensim.models import TfidfModel, LsiModel, Doc2Vec
 from gensim.similarities import MatrixSimilarity, SparseMatrixSimilarity
 
 
-def get_results(query, dataframe):
-    results_dictionary = compute_results(query, dataframe)
-    return pd.DataFrame(data=create_result_dataframe(results_dictionary, dataframe),
-                        columns=['name', "file", "line", "type", "comment", "search"])
-
 
 def start(query):
     dataframe = load_csv("res/data.csv")
