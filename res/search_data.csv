@@ -1,21 +1,21 @@
 name,file,line,type,comment,search
-Optimizer,../tensorflow/tensorflow/python/keras/optimizers.py,47,class,Abstract optimizer base class.,FREQ
-benchmark_optimizer,../tensorflow/tensorflow/python/keras/mixed_precision/experimental/loss_scale_benchmark.py,164,method,,FREQ
-applyOptimizer,../tensorflow/tensorflow/python/keras/optimizer_v2/ftrl_test.py,306,method,,FREQ
-applyOptimizer,../tensorflow/tensorflow/python/training/proximal_gradient_descent_test.py,138,method,,FREQ
-applyOptimizer,../tensorflow/tensorflow/python/training/ftrl_test.py,315,method,,FREQ
-Optimizer,../tensorflow/tensorflow/python/keras/optimizers.py,47,class,Abstract optimizer base class.,TF-IDF
-ModelWithOptimizer,../tensorflow/tensorflow/python/keras/integration_test/function_test.py,46,class,,TF-IDF
-benchmark_optimizer,../tensorflow/tensorflow/python/keras/mixed_precision/experimental/loss_scale_benchmark.py,164,method,,TF-IDF
-applyOptimizer,../tensorflow/tensorflow/python/keras/optimizer_v2/ftrl_test.py,306,method,,TF-IDF
-RestoredOptimizer,../tensorflow/tensorflow/python/keras/optimizer_v2/optimizer_v2.py,1315,class,A non-functional Optimizer implementation for checkpoint compatibility.,TF-IDF
-FtrlOptimizer,../tensorflow/tensorflow/python/training/ftrl.py,29,class,Optimizer that implements the FTRL algorithm.,LSI
-AdamOptimizer,../tensorflow/tensorflow/python/training/adam.py,32,class,Optimizer that implements the Adam algorithm.,LSI
-AdadeltaOptimizer,../tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,LSI
-optimizer_jit,../tensorflow/tensorflow/python/eager/context.py,1509,method,,LSI
-optimizer_jit,../tensorflow/tensorflow/python/eager/context.py,1515,method,,LSI
-SGD,../tensorflow/tensorflow/python/keras/optimizers.py,174,class,Stochastic gradient descent optimizer.,Doc2Vec
-Adagrad,../tensorflow/tensorflow/python/keras/optimizers.py,310,class,Adagrad optimizer.,Doc2Vec
-applyOptimizer,../tensorflow/tensorflow/python/training/ftrl_test.py,315,method,,Doc2Vec
-Optimizer,../tensorflow/tensorflow/python/training/optimizer.py,217,class,Base class for optimizers.,Doc2Vec
-applyOptimizer,../tensorflow/tensorflow/compiler/tests/proximal_gradient_descent_test.py,121,method,,Doc2Vec
+Nadam,../tensorflow/tensorflow/python/keras/optimizer_v2/nadam.py,34,class,Optimizer that implements the NAdam algorithm.,FREQ
+Adadelta,../tensorflow/tensorflow/python/keras/optimizer_v2/adadelta.py,32,class,Optimizer that implements the Adadelta algorithm.,FREQ
+FtrlOptimizer,../tensorflow/tensorflow/python/training/ftrl.py,29,class,Optimizer that implements the FTRL algorithm.,FREQ
+AdagradOptimizer,../tensorflow/tensorflow/python/training/adagrad.py,32,class,Optimizer that implements the Adagrad algorithm.,FREQ
+AdadeltaOptimizer,../tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,FREQ
+Adadelta,../tensorflow/tensorflow/python/keras/optimizers.py,383,class,Adadelta optimizer.,TF-IDF
+Nadam,../tensorflow/tensorflow/python/keras/optimizer_v2/nadam.py,34,class,Optimizer that implements the NAdam algorithm.,TF-IDF
+Adadelta,../tensorflow/tensorflow/python/keras/optimizer_v2/adadelta.py,32,class,Optimizer that implements the Adadelta algorithm.,TF-IDF
+AdamOptimizer,../tensorflow/tensorflow/python/training/adam.py,32,class,Optimizer that implements the Adam algorithm.,TF-IDF
+AdadeltaOptimizer,../tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,TF-IDF
+RMSprop,../tensorflow/tensorflow/python/keras/optimizer_v2/rmsprop.py,35,class,Optimizer that implements the RMSprop algorithm.,LSI
+Adamax,../tensorflow/tensorflow/python/keras/optimizer_v2/adamax.py,33,class,Optimizer that implements the Adamax algorithm.,LSI
+Ftrl,../tensorflow/tensorflow/python/keras/optimizer_v2/ftrl.py,30,class,Optimizer that implements the FTRL algorithm.,LSI
+Adam,../tensorflow/tensorflow/python/keras/optimizer_v2/adam.py,34,class,Optimizer that implements the Adam algorithm.,LSI
+Adadelta,../tensorflow/tensorflow/python/keras/optimizer_v2/adadelta.py,32,class,Optimizer that implements the Adadelta algorithm.,LSI
+GradientDescentOptimizer,../tensorflow/tensorflow/python/training/gradient_descent.py,30,class,Optimizer that implements the gradient descent algorithm.,Doc2Vec
+AdagradOptimizer,../tensorflow/tensorflow/python/training/adagrad.py,32,class,Optimizer that implements the Adagrad algorithm.,Doc2Vec
+AdamOptimizer,../tensorflow/tensorflow/python/training/adam.py,32,class,Optimizer that implements the Adam algorithm.,Doc2Vec
+MomentumOptimizer,../tensorflow/tensorflow/python/training/momentum.py,29,class,Optimizer that implements the Momentum algorithm.,Doc2Vec
+AdadeltaOptimizer,../tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,Doc2Vec

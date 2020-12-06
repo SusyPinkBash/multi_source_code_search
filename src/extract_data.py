@@ -21,7 +21,7 @@ class Visitor(NodeVisitor):
 
     def append_data(self, node, def_type):
         comment = get_docstring(node)
-        comment = get_docstring(node).split('\n')[0] if comment is not None else ""
+        comment = comment.split('\n')[0] if comment is not None else ""
         data.append((node.name, self.file_path, node.lineno, def_type, comment))
 
 
@@ -36,15 +36,19 @@ def is_method(function):
 def start(directory_path):
     if directory_path[-1] == '/':
         directory_path = directory_path[: -1]
+    counter = 0
     for path, _, files in walk(directory_path):
         for file_name in files:
             if file_name.endswith('.py'):
+                counter += 1
                 file_path = path + '/' + file_name
                 with open(file_path) as file:
                     Visitor(file_path, file.read())
 
     dataframe = pd.DataFrame(data=data, columns=["name", "file", "line", "type", "comment"])
     dataframe.to_csv('res/data.csv', index=False, encoding='utf-8')
+    print("files\t    " + str(counter))
+    print(dataframe["type"].value_counts())
 
 
 if len(argv) < 2:

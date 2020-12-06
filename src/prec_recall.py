@@ -1,4 +1,7 @@
 import itertools
+from datetime import datetime
+
+import string
 import pandas as pd
 import seaborn as sns
 from re import finditer
@@ -12,7 +15,6 @@ from gensim.utils import simple_preprocess
 from gensim.models import TfidfModel, LsiModel, Doc2Vec
 from gensim.similarities import MatrixSimilarity, SparseMatrixSimilarity
 
-
 ##################
 def get_results(query, dataframe):
     results_dictionary, vectors = compute_results(query, dataframe)
@@ -21,21 +23,23 @@ def get_results(query, dataframe):
 
 
 def compute_results(query, dataframe):
-    processed_corpus, frequencies, bag_of_words = create_corpus(dataframe)
+    processed_corpus, frequencies, bag_of_words = create_data(dataframe)
     query_to_execute = normalize_query(query)
-    results_dictionary = {
+    results = {
         "FREQ": filter_results(query_frequency(query_to_execute, bag_of_words, frequencies)),
-        "TF-IDF": filter_results(query_tfidf(query_to_execute, bag_of_words, frequencies))}
-    results_dictionary["LSI"], lsi_embedding = query_lsi(query_to_execute, bag_of_words, frequencies)
-    results_dictionary["Doc2Vec"], doc2vec_embedding = query_doc2vec(query_to_execute, processed_corpus)
-    return results_dictionary, [lsi_embedding, doc2vec_embedding]
+        "TF-IDF": filter_results(query_tfidf(query_to_execute, bag_of_words, frequencies))
+    }
+    vectors = dict()
+    results["LSI"], vectors["LSI"] = query_lsi(query_to_execute, bag_of_words, frequencies)
+    results["Doc2Vec"], vectors["Doc2Vec"] = query_doc2vec(query_to_execute, processed_corpus)
+    return results, vectors
 
 
 def load_csv(path):
     return pd.read_csv(path).fillna(value="")
 
 
-def create_corpus(df):
+def create_data(df):
     tokens = [filter_stopwords(normalize_tokens(handle_camel_case(split_underscore(
         [row["name"]] + split_space(row["comment"]))))) for _, row in df.iterrows()]
 
@@ -52,7 +56,7 @@ def create_corpus(df):
 
 
 def split_space(text):
-    return text.split(' ')
+    return text.translate(str.maketrans('', '', string.punctuation)).split(' ') if text != "" else []
 
 
 def split_underscore(tokens):
@@ -105,14 +109,14 @@ def filter_results(arrg):
 
 
 def query_doc2vec(query, corpus):
-    model = get_doc2vec_model(get_doc2vec_read_corpus(corpus))
+    model = get_doc2vec_model(get_doc2vec_corpus(corpus))
     vector = model.infer_vector(query)
     similar = model.docvecs.most_similar([vector], topn=5)
     return [index for (index, _) in similar], \
            [list(vector)] + [list(model.infer_vector(corpus[index])) for index, _ in similar]
 
 
-def get_doc2vec_read_corpus(corpus):
+def get_doc2vec_corpus(corpus):
     return [TaggedDocument(simple_preprocess(' '.join(element)), [index])
             for index, element in enumerate(corpus)]
 
@@ -146,9 +150,8 @@ class Stat:
         self.recalls = recalls
 
 
-def start_computing(path_csv, path_ground_truth):
-    print("##### START #####")
-    dataframe = pd.read_csv(path_csv).fillna(value="")
+def start(path_ground_truth):
+    dataframe = pd.read_csv("res/data.csv").fillna(value="")
     ground_truth, queries = parse_ground_truth(path_ground_truth)
     scores, vectors = compute_precision_recall(ground_truth, dataframe)
     plot_vectors(compute_tsne(vectors), queries)
@@ -170,8 +173,8 @@ def compute_precision_recall(ground_truth, dataframe):
     vectors = {"LSI": [], "Doc2Vec": []}
     for entry in ground_truth:
         results, vectors_i = get_results(entry.query, dataframe)
-        vectors["LSI"] += vectors_i[0]
-        vectors["Doc2Vec"] += vectors_i[1]
+        vectors["LSI"] += vectors_i["LSI"]
+        vectors["Doc2Vec"] += vectors_i["Doc2Vec"]
         for query_type in ["FREQ", "TF-IDF", "LSI", "Doc2Vec"]:
             precision = compute_precision(entry, query_type, results)
             scores[query_type].append(Stat(precision, compute_recall(precision)))
@@ -210,7 +213,7 @@ def plot_vectors(dictionary, queries):
         sns_plot = sns.scatterplot(
             x="x",
             y="y",
-            # hue=queries + list(itertools.chain.from_iterable([query] * 5 for query in queries)),
+            hue=queries + list(itertools.chain.from_iterable([query] * 5 for query in queries)),
             data=dataframe,
             legend="full",
             alpha=1.0
@@ -236,9 +239,11 @@ def compute_mean(stats):
     return str(precision / counter), str(recall / counter)
 
 
-if len(argv) < 2:
-    print("Please give as input the csv of search data and the ground truth files")
+if len(argv) < 1:
+    print("Please give as input ground truth file")
     exit(1)
 
-print("#########################")
-start_computing(argv[1], argv[2])
+
+begin_time = datetime.now()
+start(argv[1])
+print(datetime.now() - begin_time)

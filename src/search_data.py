@@ -1,6 +1,8 @@
+from datetime import datetime
+import string
+import pandas as pd
 from re import finditer
 from sys import argv, exit
-import pandas as pd
 from collections import defaultdict
 from gensim.corpora import Dictionary
 from gensim.models.doc2vec import TaggedDocument
@@ -9,32 +11,35 @@ from gensim.models import TfidfModel, LsiModel, Doc2Vec
 from gensim.similarities import MatrixSimilarity, SparseMatrixSimilarity
 
 
-
 def start(query):
     dataframe = load_csv("res/data.csv")
-    results_dictionary = compute_results(query, dataframe)
-    results = pd.DataFrame(data=print_queries(results_dictionary, dataframe),
+    results_dictionary, _ = compute_results(query, dataframe)
+    results = pd.DataFrame(data=create_result_dataframe(results_dictionary, dataframe),
                            columns=['name', "file", "line", "type", "comment", "search"])
+    pd.options.display.max_colwidth = 200
+    print_results(results)
+    results.to_latex('res/search_data.tex', index=False, encoding='utf-8')
     results.to_csv('res/search_data.csv', index=False, encoding='utf-8')
 
 
 def compute_results(query, dataframe):
-    processed_corpus, frequencies, bag_of_words = create_corpus(dataframe)
+    processed_corpus, frequencies, bag_of_words = create_data(dataframe)
     query_to_execute = normalize_query(query)
-    results_dictionary = {
-        "FREQ": filter_results(query_frequency(query_to_execute, bag_of_words, frequencies)),
-        "TF-IDF": filter_results(query_tfidf(query_to_execute, bag_of_words, frequencies)),
-        "LSI": filter_results(query_lsi(query_to_execute, bag_of_words, frequencies)),
-        "Doc2Vec": query_doc2vec(query_to_execute, processed_corpus)
+    results = {
+        "FREQ": query_frequency(query_to_execute, bag_of_words, frequencies),
+        "TF-IDF": query_tfidf(query_to_execute, bag_of_words, frequencies)
     }
-    return results_dictionary
+    vectors = dict()
+    results["LSI"], vectors["LSI"] = query_lsi(query_to_execute, bag_of_words, frequencies)
+    results["Doc2Vec"], vectors["Doc2Vec"] = query_doc2vec(query_to_execute, processed_corpus)
+    return results, vectors
 
 
 def load_csv(path):
     return pd.read_csv(path).fillna(value="")
 
 
-def create_corpus(df):
+def create_data(df):
     tokens = [filter_stopwords(normalize_tokens(handle_camel_case(split_underscore(
         [row["name"]] + split_space(row["comment"]))))) for _, row in df.iterrows()]
 
@@ -51,7 +56,7 @@ def create_corpus(df):
 
 
 def split_space(text):
-    return text.split(' ')
+    return text.translate(str.maketrans('', '', string.punctuation)).split(' ') if text != "" else []
 
 
 def split_underscore(tokens):
@@ -82,17 +87,21 @@ def normalize_query(query):
 
 
 def query_frequency(query, bow, dictionary):
-    return SparseMatrixSimilarity(bow, num_features=len(dictionary.token2id))[dictionary.doc2bow(query)]
+    return filter_results(SparseMatrixSimilarity(bow, num_features=len(dictionary.token2id))[dictionary.doc2bow(query)])
 
 
 def query_tfidf(query, bow, dictionary):
     model = TfidfModel(bow)
-    return SparseMatrixSimilarity(model[bow], num_features=len(dictionary.token2id))[model[dictionary.doc2bow(query)]]
+    return filter_results(SparseMatrixSimilarity(model[bow], num_features=len(dictionary.token2id))[model[dictionary.doc2bow(query)]])
 
 
 def query_lsi(query, bow, dictionary):
     model = LsiModel(bow, id2word=dictionary, num_topics=300)
-    return abs(MatrixSimilarity(model[bow])[model[dictionary.doc2bow(query)]])
+    vector = model[dictionary.doc2bow(query)]
+    result = abs(MatrixSimilarity(model[bow])[vector])
+    embedding = [[value for _, value in vector]] + [[value for _, value in model[bow][i]] for i, value in
+                                                    sorted(enumerate(result), key=lambda x: x[1], reverse=True)[:5]]
+    return filter_results(result), embedding
 
 
 def filter_results(arrg):
@@ -100,11 +109,14 @@ def filter_results(arrg):
 
 
 def query_doc2vec(query, corpus):
-    model = get_doc2vec_model(get_doc2vec_read_corpus(corpus))
-    return [index for (index, _) in model.docvecs.most_similar([model.infer_vector(query)], topn=5)]
+    model = get_doc2vec_model(get_doc2vec_corpus(corpus))
+    vector = model.infer_vector(query)
+    similar = model.docvecs.most_similar([vector], topn=5)
+    return [index for (index, _) in similar], \
+           [list(vector)] + [list(model.infer_vector(corpus[index])) for index, _ in similar]
 
 
-def get_doc2vec_read_corpus(corpus):
+def get_doc2vec_corpus(corpus):
     return [TaggedDocument(simple_preprocess(' '.join(element)), [index])
             for index, element in enumerate(corpus)]
 
@@ -123,15 +135,10 @@ def create_result_dataframe(queries_dictionary, df):
             yield [row["name"], row["file"], row["line"], row["type"], row["comment"], key]
 
 
-def print_queries(queries_dictionary, df):
-    for key, values in queries_dictionary.items():
-        print(key)
-        for index in sorted(values):
-            row = df.iloc[index]
-            print("document:", index)
-            print(row, '\n')
-            yield [row["name"], row["file"], row["line"], row["type"], row["comment"], key]
-        print()
+def print_results(df):
+    grouped = df.groupby(['search'])
+    for key, item in grouped:
+        print(grouped.get_group(key), "\n\n")
 
 
 if len(argv) < 2:

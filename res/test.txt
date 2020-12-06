@@ -1,7 +1,0 @@
-AST Visitor that looks for specific API usage without editing anything
-PastaAnalyzeVisitor
-../tensorflow/tensorflow/tools/compatibility/ast_edits.py
-
-Convert a TensorShape to a list
-TensorShapeProtoToList
-../tensorflow/tensorflow/python/framework/tensor_util.py
