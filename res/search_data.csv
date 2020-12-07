@@ -1,21 +1,21 @@
 name,file,line,type,comment,search
-Nadam,../tensorflow/tensorflow/python/keras/optimizer_v2/nadam.py,34,class,Optimizer that implements the NAdam algorithm.,FREQ
-Adadelta,../tensorflow/tensorflow/python/keras/optimizer_v2/adadelta.py,32,class,Optimizer that implements the Adadelta algorithm.,FREQ
-FtrlOptimizer,../tensorflow/tensorflow/python/training/ftrl.py,29,class,Optimizer that implements the FTRL algorithm.,FREQ
-AdagradOptimizer,../tensorflow/tensorflow/python/training/adagrad.py,32,class,Optimizer that implements the Adagrad algorithm.,FREQ
-AdadeltaOptimizer,../tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,FREQ
-Adadelta,../tensorflow/tensorflow/python/keras/optimizers.py,383,class,Adadelta optimizer.,TF-IDF
-Nadam,../tensorflow/tensorflow/python/keras/optimizer_v2/nadam.py,34,class,Optimizer that implements the NAdam algorithm.,TF-IDF
-Adadelta,../tensorflow/tensorflow/python/keras/optimizer_v2/adadelta.py,32,class,Optimizer that implements the Adadelta algorithm.,TF-IDF
-AdamOptimizer,../tensorflow/tensorflow/python/training/adam.py,32,class,Optimizer that implements the Adam algorithm.,TF-IDF
-AdadeltaOptimizer,../tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,TF-IDF
-RMSprop,../tensorflow/tensorflow/python/keras/optimizer_v2/rmsprop.py,35,class,Optimizer that implements the RMSprop algorithm.,LSI
-Adamax,../tensorflow/tensorflow/python/keras/optimizer_v2/adamax.py,33,class,Optimizer that implements the Adamax algorithm.,LSI
-Ftrl,../tensorflow/tensorflow/python/keras/optimizer_v2/ftrl.py,30,class,Optimizer that implements the FTRL algorithm.,LSI
-Adam,../tensorflow/tensorflow/python/keras/optimizer_v2/adam.py,34,class,Optimizer that implements the Adam algorithm.,LSI
-Adadelta,../tensorflow/tensorflow/python/keras/optimizer_v2/adadelta.py,32,class,Optimizer that implements the Adadelta algorithm.,LSI
-GradientDescentOptimizer,../tensorflow/tensorflow/python/training/gradient_descent.py,30,class,Optimizer that implements the gradient descent algorithm.,Doc2Vec
-AdagradOptimizer,../tensorflow/tensorflow/python/training/adagrad.py,32,class,Optimizer that implements the Adagrad algorithm.,Doc2Vec
-AdamOptimizer,../tensorflow/tensorflow/python/training/adam.py,32,class,Optimizer that implements the Adam algorithm.,Doc2Vec
-MomentumOptimizer,../tensorflow/tensorflow/python/training/momentum.py,29,class,Optimizer that implements the Momentum algorithm.,Doc2Vec
-AdadeltaOptimizer,../tensorflow/tensorflow/python/training/adadelta.py,29,class,Optimizer that implements the Adadelta algorithm.,Doc2Vec
+preprocess_input,../tensorflow/tensorflow/python/keras/applications/imagenet_utils.py,104,function,Preprocesses a tensor or Numpy array encoding a batch of images.,FREQ
+Tensor,../tensorflow/tensorflow/python/framework/ops.py,259,class,A tensor is a multidimensional array of elements represented by a,FREQ
+slice,../tensorflow/tensorflow/python/ops/array_ops.py,1048,function,Extracts a slice from a tensor.,FREQ
+strided_slice,../tensorflow/tensorflow/python/ops/array_ops.py,1104,function,Extracts a strided slice of a tensor (generalized Python array indexing).,FREQ
+scatter,../tensorflow/tensorflow/python/ops/tensor_array_ops.py,1227,method,Scatter the values of a `Tensor` in specific indices of a `TensorArray`.,FREQ
+StridedSliceShapeChecker,../tensorflow/tensorflow/python/kernel_tests/array_ops_test.py,851,class,,TF-IDF
+benchmark_strided_slice_skip,../tensorflow/tensorflow/python/kernel_tests/array_ops_test.py,1089,method,,TF-IDF
+StridedSliceBenchmark,../tensorflow/tensorflow/python/kernel_tests/array_ops_test.py,1066,class,Benchmark new strided slice operation on non-trivial case.,TF-IDF
+slice,../tensorflow/tensorflow/python/ops/array_ops.py,1048,function,Extracts a slice from a tensor.,TF-IDF
+strided_slice,../tensorflow/tensorflow/python/ops/array_ops.py,1104,function,Extracts a strided slice of a tensor (generalized Python array indexing).,TF-IDF
+softplus,../tensorflow/tensorflow/python/keras/backend.py,4624,function,Softplus of a tensor.,LSI
+softsign,../tensorflow/tensorflow/python/keras/backend.py,4638,function,Softsign of a tensor.,LSI
+Tensor,../tensorflow/tensorflow/python/framework/ops.py,259,class,A tensor is a multidimensional array of elements represented by a,LSI
+slice,../tensorflow/tensorflow/python/ops/array_ops.py,1048,function,Extracts a slice from a tensor.,LSI
+strided_slice,../tensorflow/tensorflow/python/ops/array_ops.py,1104,function,Extracts a strided slice of a tensor (generalized Python array indexing).,LSI
+GeneratorDataAdapter,../tensorflow/tensorflow/python/keras/engine/data_adapter.py,746,class,Adapter that handles python generators and iterators.,Doc2Vec
+python_grad_func,../tensorflow/tensorflow/python/framework/function.py,350,method,Python gradient function callable.,Doc2Vec
+strided_slice,../tensorflow/tensorflow/python/ops/array_ops.py,1104,function,Extracts a strided slice of a tensor (generalized Python array indexing).,Doc2Vec
+profile_python,../tensorflow/tensorflow/python/profiler/model_analyzer.py,207,method,Profile the statistics of the Python codes.,Doc2Vec
+python_function,../tensorflow/tensorflow/python/eager/function.py,2925,method,Returns the wrapped Python function.,Doc2Vec

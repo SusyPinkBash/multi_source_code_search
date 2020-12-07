@@ -1,6 +1,8 @@
 from datetime import datetime
 import string
+from os import path
 import pandas as pd
+import pickle as pkl
 from re import finditer
 from sys import argv, exit
 from collections import defaultdict
@@ -12,7 +14,7 @@ from gensim.similarities import MatrixSimilarity, SparseMatrixSimilarity
 
 
 def start(query):
-    dataframe = load_csv("res/data.csv")
+    dataframe = pd.read_csv("res/data.csv").fillna(value="")
     results_dictionary, _ = compute_results(query, dataframe)
     results = pd.DataFrame(data=create_result_dataframe(results_dictionary, dataframe),
                            columns=['name', "file", "line", "type", "comment", "search"])
@@ -33,10 +35,6 @@ def compute_results(query, dataframe):
     results["LSI"], vectors["LSI"] = query_lsi(query_to_execute, bag_of_words, frequencies)
     results["Doc2Vec"], vectors["Doc2Vec"] = query_doc2vec(query_to_execute, processed_corpus)
     return results, vectors
-
-
-def load_csv(path):
-    return pd.read_csv(path).fillna(value="")
 
 
 def create_data(df):
@@ -122,9 +120,14 @@ def get_doc2vec_corpus(corpus):
 
 
 def get_doc2vec_model(corpus):
+    return pkl.load(open('res/doc2vec.pkl', "rb")) if path.exists('res/doc2vec.pkl') else create_doc2vec_model(corpus)
+
+
+def create_doc2vec_model(corpus):
     model = Doc2Vec(vector_size=300, min_count=2, epochs=77)
     model.build_vocab(corpus)
     model.train(corpus, total_examples=model.corpus_count, epochs=model.epochs)
+    pkl.dump(model, open('res/doc2vec.pkl', "wb"), protocol=pkl.HIGHEST_PROTOCOL)
     return model
 
 
@@ -145,4 +148,6 @@ if len(argv) < 2:
     print("Please give as input the query")
     exit(1)
 
+begin_time = datetime.now()
 start(argv[1])
+print(datetime.now() - begin_time)

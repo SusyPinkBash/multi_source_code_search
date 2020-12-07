@@ -3,6 +3,8 @@ from datetime import datetime
 
 import string
 import pandas as pd
+from os import path
+import pickle as pkl
 import seaborn as sns
 from re import finditer
 from sys import argv, exit
@@ -33,10 +35,6 @@ def compute_results(query, dataframe):
     results["LSI"], vectors["LSI"] = query_lsi(query_to_execute, bag_of_words, frequencies)
     results["Doc2Vec"], vectors["Doc2Vec"] = query_doc2vec(query_to_execute, processed_corpus)
     return results, vectors
-
-
-def load_csv(path):
-    return pd.read_csv(path).fillna(value="")
 
 
 def create_data(df):
@@ -122,9 +120,14 @@ def get_doc2vec_corpus(corpus):
 
 
 def get_doc2vec_model(corpus):
+    return pkl.load(open('res/doc2vec.pkl', "rb")) if path.exists('res/doc2vec.pkl') else create_doc2vec_model(corpus)
+
+
+def create_doc2vec_model(corpus):
     model = Doc2Vec(vector_size=300, min_count=2, epochs=77)
     model.build_vocab(corpus)
     model.train(corpus, total_examples=model.corpus_count, epochs=model.epochs)
+    pkl.dump(model, open('res/doc2vec.pkl', "wb"), protocol=pkl.HIGHEST_PROTOCOL)
     return model
 
 
@@ -159,7 +162,6 @@ def start(path_ground_truth):
 
 
 def parse_ground_truth(path_ground_truth):
-    print("##### GROUND TRUTH #####")
     classes, queries = [], []
     for entry in open(path_ground_truth, "r").read().split("\n\n"):
         data = entry.split("\n")
@@ -182,12 +184,12 @@ def compute_precision_recall(ground_truth, dataframe):
 
 
 def compute_precision(truth, search_type, dataframe):
-    precision, counter = 0, 0
+    counter = 0
     for _, row in dataframe[dataframe['search'] == search_type].iterrows():
-        if row["name"] == truth.name and row["file"] == truth.path:
-            return 1 / (counter + 1)
         counter += 1
-    return precision
+        if row["name"] == truth.name and row["file"] == truth.path:
+            return 1 / counter
+    return 0
 
 
 def compute_recall(precision):
