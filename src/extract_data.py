@@ -7,7 +7,7 @@ import pandas as pd
 class Visitor(NodeVisitor):
     def __init__(self, file_path, node):
         super().__init__()
-        self.file_path = file_path
+        self.file_path = clean_file_path(file_path)
         self.visit(parse(node))
 
     def visit_ClassDef(self, node: ClassDef):
@@ -23,6 +23,11 @@ class Visitor(NodeVisitor):
         comment = get_docstring(node)
         comment = comment.split('\n')[0] if comment is not None else ""
         data.append((node.name, self.file_path, node.lineno, def_type, comment))
+
+
+def clean_file_path(path):
+    directories = path.split('/')
+    return '../' + '/'.join(directories[directories.index('tensorflow'):])
 
 
 def is_valid_entity(name):
