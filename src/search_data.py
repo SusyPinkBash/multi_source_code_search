@@ -84,6 +84,18 @@ def normalize_query(query):
     return query.strip().lower().split()
 
 
+def load_model(name):
+    return pkl.load(open('res/model_' + name + '.pkl', "rb"))
+
+
+def exists_model(name):
+    return path.exists('res/model_' + name + '.pkl')
+
+
+def save_model(model, name):
+    pkl.dump(model, open('res/model_' + name + '.pkl', "wb"), protocol=pkl.HIGHEST_PROTOCOL)
+
+
 def query_frequency(query, bow, dictionary):
     return filter_results(SparseMatrixSimilarity(bow, num_features=len(dictionary.token2id))[dictionary.doc2bow(query)])
 
@@ -94,12 +106,22 @@ def query_tfidf(query, bow, dictionary):
 
 
 def query_lsi(query, bow, dictionary):
-    model = LsiModel(bow, id2word=dictionary, num_topics=300)
+    model = get_lsi_model(bow, dictionary)
     vector = model[dictionary.doc2bow(query)]
     result = abs(MatrixSimilarity(model[bow])[vector])
     embedding = [[value for _, value in vector]] + [[value for _, value in model[bow][i]] for i, value in
                                                     sorted(enumerate(result), key=lambda x: x[1], reverse=True)[:5]]
     return filter_results(result), embedding
+
+
+def get_lsi_model(bow, dictionary):
+    return load_model('lsi') if exists_model('lsi') else create_lsi_model(bow, dictionary)
+
+
+def create_lsi_model(bow, dictionary):
+    model = LsiModel(bow, id2word=dictionary, num_topics=300)
+    save_model(model, 'lsi')
+    return model
 
 
 def filter_results(arrg):
@@ -120,14 +142,14 @@ def get_doc2vec_corpus(corpus):
 
 
 def get_doc2vec_model(corpus):
-    return pkl.load(open('res/doc2vec.pkl', "rb")) if path.exists('res/doc2vec.pkl') else create_doc2vec_model(corpus)
+    return load_model('doc2vec') if exists_model('doc2vec') else create_doc2vec_model(corpus)
 
 
 def create_doc2vec_model(corpus):
     model = Doc2Vec(vector_size=300, min_count=2, epochs=77)
     model.build_vocab(corpus)
     model.train(corpus, total_examples=model.corpus_count, epochs=model.epochs)
-    pkl.dump(model, open('res/doc2vec.pkl', "wb"), protocol=pkl.HIGHEST_PROTOCOL)
+    save_model(model, 'doc2vec')
     return model
 
 
