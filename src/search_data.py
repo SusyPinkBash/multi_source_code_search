@@ -25,7 +25,7 @@ def start(query):
 
 
 def compute_results(query, dataframe):
-    processed_corpus, frequencies, bag_of_words = create_data(dataframe)
+    processed_corpus, frequencies, bag_of_words = get_data(dataframe)
     query_to_execute = normalize_query(query)
     results = {
         "FREQ": query_frequency(query_to_execute, bag_of_words, frequencies),
@@ -37,6 +37,10 @@ def compute_results(query, dataframe):
     return results, vectors
 
 
+def get_data(df):
+    return load_data_files() if exists_data_files() else create_data(df)
+
+
 def create_data(df):
     tokens = [filter_stopwords(normalize_tokens(handle_camel_case(split_underscore(
         [row["name"]] + split_space(row["comment"]))))) for _, row in df.iterrows()]
@@ -46,11 +50,34 @@ def create_data(df):
         for word in token:
             frequency[word] += 1
 
-    processed = [[token for token in text if frequency[token] > 1] for text in tokens]
-    dictionary = Dictionary(processed)
-    bow = [dictionary.doc2bow(text) for text in processed]
+    corpus = [[token for token in text if frequency[token] > 1] for text in tokens]
+    dictionary = Dictionary(corpus)
+    bow = [dictionary.doc2bow(text) for text in corpus]
 
-    return processed, dictionary, bow
+    save_data(corpus, 'corpus')
+    save_data(dictionary, 'dictionary')
+    save_data(bow, 'bow')
+    return corpus, dictionary, bow
+
+
+def exists_data_files():
+    return exists_file('corpus') and exists_file('dictionary') and exists_file('bow')
+
+
+def exists_file(name):
+    return path.exists('res/' + name + '.pkl')
+
+
+def load_data_files():
+    return load_file('corpus'), load_file('dictionary'), load_file('bow')
+
+
+def save_data(data, name):
+    pkl.dump(data, open('res/' + name + '.pkl', "wb"), protocol=pkl.HIGHEST_PROTOCOL)
+
+
+def load_file(name):
+    return pkl.load(open('res/' + name + '.pkl', "rb"))
 
 
 def split_space(text):
@@ -84,14 +111,6 @@ def normalize_query(query):
     return query.strip().lower().split()
 
 
-def load_model(name):
-    return pkl.load(open('res/model_' + name + '.pkl', "rb"))
-
-
-def exists_model(name):
-    return path.exists('res/model_' + name + '.pkl')
-
-
 def save_model(model, name):
     pkl.dump(model, open('res/model_' + name + '.pkl', "wb"), protocol=pkl.HIGHEST_PROTOCOL)
 
@@ -115,7 +134,7 @@ def query_lsi(query, bow, dictionary):
 
 
 def get_lsi_model(bow, dictionary):
-    return load_model('lsi') if exists_model('lsi') else create_lsi_model(bow, dictionary)
+    return load_file('model_lsi') if exists_file('model_lsi') else create_lsi_model(bow, dictionary)
 
 
 def create_lsi_model(bow, dictionary):
@@ -142,7 +161,7 @@ def get_doc2vec_corpus(corpus):
 
 
 def get_doc2vec_model(corpus):
-    return load_model('doc2vec') if exists_model('doc2vec') else create_doc2vec_model(corpus)
+    return load_file('model_doc2vec') if exists_file('model_doc2vec') else create_doc2vec_model(corpus)
 
 
 def create_doc2vec_model(corpus):
