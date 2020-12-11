@@ -112,16 +112,47 @@ def normalize_query(query):
 
 
 def save_model(model, name):
-    pkl.dump(model, open('res/model_' + name + '.pkl', "wb"), protocol=pkl.HIGHEST_PROTOCOL)
+    save_data(model, 'model_' + name)
 
 
 def query_frequency(query, bow, dictionary):
-    return filter_results(SparseMatrixSimilarity(bow, num_features=len(dictionary.token2id))[dictionary.doc2bow(query)])
+    return filter_results(get_freq_model(bow, dictionary)[dictionary.doc2bow(query)])
+
+
+def get_freq_model(bow, dictionary):
+    return load_file('model_freq') if exists_file('model_freq') else create_freq_model(bow, dictionary)
+
+
+def create_freq_model(bow, dictionary):
+    model = SparseMatrixSimilarity(bow, num_features=len(dictionary.token2id))
+    save_model(model, 'freq')
+    return model
 
 
 def query_tfidf(query, bow, dictionary):
+    model = get_tfidf_model(bow)
+    matrix = get_tfidf_matrix(model, bow, dictionary)
+    return filter_results(matrix[model[dictionary.doc2bow(query)]])
+
+
+def get_tfidf_model(bow):
+    return load_file('model_tfidf') if exists_file('model_tfidf') else create_tfidf_model(bow)
+
+
+def create_tfidf_model(bow):
     model = TfidfModel(bow)
-    return filter_results(SparseMatrixSimilarity(model[bow], num_features=len(dictionary.token2id))[model[dictionary.doc2bow(query)]])
+    save_model(model, 'tfidf')
+    return model
+
+
+def get_tfidf_matrix(model, bow, dictionary):
+    return load_file('matrix_tfidf') if exists_file('matrix_tfidf') else create_tfidf_matrix(model, bow, dictionary)
+
+
+def create_tfidf_matrix(model, bow, dictionary):
+    matrix = SparseMatrixSimilarity(model[bow], num_features=len(dictionary.token2id))
+    save_data(matrix, 'matrix_tfidf')
+    return model
 
 
 def query_lsi(query, bow, dictionary):
@@ -189,6 +220,4 @@ if len(argv) < 2:
     print("Please give as input the query")
     exit(1)
 
-begin_time = datetime.now()
 start(argv[1])
-print(datetime.now() - begin_time)

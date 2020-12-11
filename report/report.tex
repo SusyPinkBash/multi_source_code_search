@@ -69,14 +69,14 @@ This file takes as argument the path of the directory of the project that we wan
 
 \subsection{Description of the code} % 1: code description
 To efficiently parse the files in the directory, we created a class named \texttt{Visitor}, which extends the \href{https://docs.python.org/3/library/ast.html#ast.NodeVisitor}{\texttt{NodeVisitor}} class of the standard library ast (which stands for Abstract Syntax Tree). This class holds the path of the file. There is a global variable \texttt{data} used throughout the execution to store all the information extracted.\\
-The function \texttt{start(directory\_path)} \emph{`walks'} the given directory using the function \texttt{walk} which generates a 3-tuple of directory path, directory names and file names. We open and read all the python files, checked with the extension of the file, we create a Visitor object and start to visit. The class we created has two different visit methods which differ in if the node visiting is a definition of a class or a function.\\
-The method \texttt{visit\_FunctionDef(self, node: FunctionDef)} adds the node information to the array of data if the function or method is not a main or a test. Since this method is used both for functions and methods, we know that is a method if the first argument is self.
+The function \texttt{start(directory\_path)} \emph{`walks'} the given directory using the function \texttt{walk} which generates a 3-tuple of directory path, directory names and file names. We open and read all the python files, checked with the extension of the file, we create a Visitor object and start to visit. The class we created has two different visit methods which differ in if the node visiting is a definition of a class or a function.
+The method \texttt{visit\_FunctionDef(self, node: FunctionDef)} adds the node information to the array of data if the function or method is not a main or a test. Since this method is used both for functions and methods, we know if the node is a method by checking if the first argument is \texttt{self}.
 The method \texttt{visit\_ClassDef(self, node: ClassDef)} calls a generic visit (of the ast library) and, as the previous method, adds the node information to the array of data if the class is not a main or a test. \\
-After the parsing is complete I create a pandas dataframe, feeding it as data the data array, and export it in a csv extension.
+After the parsing is complete we create a pandas dataframe, feeding it as data the data array, and export it in a csv extension.
 
 \subsection{Results}
 % 1: results
-Table \ref{tab:DataExtraction} show the number of Python files, classes, methods and functions found while parsing the Tensorlow directory.
+Table \ref{tab:DataExtraction} show the number of Python files, classes, methods and functions found while parsing the Tensorflow directory. The results can be found in the file \texttt{res/data.csv}.
 
 \begin{table}[h]
 \centering
@@ -94,25 +94,27 @@ Functions		&	4881	\\ \hline
 \section{Training of search engines} % 2
 \subsection{Goal and Input parameter} % 2: goal & input
 This part of the project consists of representing code entities using the four embeddings frequency, TF-IDF, LSI and Doc2Vec.\\
-This file takes as argument a query.
+This file takes as argument a query which will be fed to the four search engines. 
 
 \subsection{Description of the code} % 2: code description
 The function \texttt{start(query)} loads the csv into a pandas dataframe and then computes the results.
-The first part of function \texttt{compute\_results(query, dataframe)} creates the necessary data and normalize the query that the second part needs to produce the results.
-The first part of function \texttt{create\_data(dataframe)} extracts the names and comments from the dataframes to create a clean array of arrays of tokens and a dictionary with the frequencies of each token. In the second part we create the corpus by processing the tokens, we create a gensim dictionary and the bag of words. 
+The first part of function \texttt{compute\_results(query, dataframe)} creates the necessary data and normalizes the query that the second part needs to produce the results.\\
+The first part of function \texttt{create\_data(dataframe)} extracts the names and comments of the data extracted in the first part. to create a clean array of arrays of tokens and a dictionary with the frequencies of each token. In the second part we create the corpus by processing the tokens, we create a gensim dictionary and the bag of words. At the end of the creation, we save the corpus, dictionary and bag of words in external files to then load them in future runs.
 In the second part of function \texttt{compute\_results(query, dataframe)} we create a dictionary that hold the results of the searches and a dictionary to save the embedding vectors. \\
 The function \texttt{query\_frequency(query, bow, dictionary)} creates a sparse matrix of the bag of words and returns an array with the similarity scores of each entity of the given csv file. This array is then filtered to extract only the top 5 scoring entities.
 Similarly, the function \texttt{query\_tfidf(query, bow, dictionary)} creates a sparse matrix of the tfidf model of the bag of words and returns an array with the similarity scores which is then filtered.
 The function \texttt{query\_lsi(query, bow, dictionary)} creates a lsi model based on the bag of words, a vector based on the model and the dictionary, the matrix of the similarities and the embedding vectors. The result of the matrix, as in the previous cases, is filtered to get only the top 5 scores.
-The function \texttt{query\_doc2vec(query, bow, dictionary)} creates a doc2vec model which then feed the corpus to and train it. We save the trained model in an external pickle file to load it in the next runs. This improves the running time of this function.  We create a vector infering it from the query, we create the similarity and take only the top 5 scores and the embedding vectors.\\
+The function \texttt{query\_doc2vec(query, bow, dictionary)} creates a doc2vec model which then feed the corpus to and train it. We create a vector infering it from the query, we create the similarity and take only the top 5 scores and the embedding vectors.\\
+We save the trained models in external pickle files to load then load them in the next runs. This improves the running time of the function.\\
 We create a dataframe with the information stored in the dictionary, we print the results and save them in a separate file.
 
 \subsection{Results} % 2: results
-To show the results we run this part of the project with the query:\emph{`Optimizer that implements the Adadelta algorithm'}.\\
+To show the results we run this part of the project with the query:\\
+\centerline{\emph{`AST Visitor that looks for specific API usage without editing anything'}}.\\
 % 2 : comment results 
-Figure \ref{fig:Part2} show the result of the given query.
-As we can see in the image all results are classes. Almost all results have as comment the sentence \emph{`Optimizer that implements the x algorithm'} with x being an algorithm name.\\
-The most common document found is \texttt{Adadelta} with 3 findings, \texttt{AdadeltaOptimizer} with 3. Both documents have the same comments. The first, with path ../tensorflow/tensorflow/python/keras/optimizer\_v2/adadelta.py, was found by Frequencies, TD-IDF and LSI. The second, with path ../tensorflow/tensorflow/python/training/adadelta.py, was found by Frequency, TF-IDF and Doc2Vec. Frequency and TF-IDF have the best results.
+The correct document is \texttt{PastaAnalyzeVisitor} with path \texttt{../tensorflow/tensorflow/tools/\\compatibility/ast\_edits.py}.\\
+Figure \ref{fig:Part2} show the result of the given query.\\
+As we can see in the image all search engine find the correct result. Frequency, TF-IDF and LSI find it as the first result. Doc2Vec finds the correct result as second result. The first result is a class in the same file but named \texttt{APIChangeSpec} and with a different comment. This result is found only by this search engine. Doc2Vec has different results compared to the other search engines. Frequency and TF-IDF have the most similar results.
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.95\textwidth]{../res/part2.png}
@@ -131,9 +133,10 @@ To efficiently parse the ground truth file, we created a class named \texttt{Tru
 To compute precision and recall we get the data of the results and the embedding vectors from the previous part. We create a dictionary to save the scores of the queries and a dictionary for the vectors. We then compute the precision and recall, by comparing our results and the ground truth.
 
 \subsection{Results} % 3: comment results
-Table \ref{tab:Evaluation} show the statistics of precision and recall compared to the ground truth.
-We can see that the precision is low for all engines. The engine with the highest precision is \texttt{Doc2Vec}. 
-The recall is higher than the precision. The engine \texttt{TF-IDF} has a recall equal to $1$. The second highest recall is of \texttt{Frequencies} with score $0.9$. Both \texttt{LSI} and \texttt{Doc2Vec} have a recall of $0.8$.
+Table \ref{tab:Evaluation} show the statistics of precision and recall compared to the unique ground truth.
+We can see that the precision is low for all engines. The engine with the highest precision is \texttt{LSI}, which is the only score higher than $0.4$. The second highest precision is \texttt{TF-IDF}, followed by \texttt{Frequencies} and then \textbf{Doc2Vec}.
+ We can say that almost all search engine have a similar precision.\\
+The recall is higher than the precision. The \texttt{TF-IDF} engine has a recall equal to $1$, which means that for each query the search engine has found the correct result in the top 5. The second highest recall is of \texttt{Frequencies} with score $0.9$. Both \texttt{LSI} and \texttt{Doc2Vec} have a recall of $0.8$.
 
 \begin{table}[h]
 \centering
@@ -143,7 +146,7 @@ The recall is higher than the precision. The engine \texttt{TF-IDF} has a recall
 Frequencies 		&	0.332	&	0.9	\\
 TD-IDF			&	0.365	&	1.0	\\
 LSI				&	0.403	&	0.8	\\
-Doc2Vec			&	0.417	&	0.8	\\ \hline
+Doc2Vec			&	0.323	&	0.8	\\ \hline
 \end{tabular}
 \captionof{table}{Statistics of the search engines}\label{tab:Evaluation}
 \end{table}
@@ -155,9 +158,19 @@ This part of the project consists of visualizing the embedding vectors of the qu
 This file takes as argument the ground truth file.
 
 \subsection{Description of the code} % 4: code description
-The first part of the execution is the same as the previous file. After the results are calculated, we plot the TSNE of the embedding vectors, that we retrieved in the explxanation above but we did not use. The plot is straight-forward: we create a dataframe with the information of x and y coordinates and print them of different hues.
+The first part of the execution is the same as the previous file. After the results are calculated, we use the embedding vectors, that we retrieved in the explanation above but we did not use. For vector we apply TSNE to produce 2D vectors composed of queries and the top 4 results.
+The plot is straight-forward: we create a dataframe with the information of x and y coordinates and print them of different hues. We use the library \texttt{seaborn} to create the charts and we then save them on disk.
+
 \subsection{Results} % TODO 4: comment results
-Figure \ref{fig:plots} shows the plots of the visualization of the queries.
+Figure \ref{fig:plots} shows the plots of the visualization of the queries. At first we notice that the LSI scatterplot tends to be more a bit compact, while the Doc2Vec scatterplot is more sparse. The optimal solution is to have defined clusters for each query. This does not happen in any of the two images.\\
+\subsubsection{LSI}
+Analyzing the plot of LSI, shown in figure \ref{fig:lsi}, we can see that some results of the queries tend to stay close, but not completely. There are some clusters that are close.
+In most cases the cluster have different queries. The most well defined cluster is \emph{`Gather gpu device info'}, colored in purple. The sparseness of the data reflects the low precision.
+
+\subsubsection{Doc2Vec}
+Analyzing the plot of Doc2Vec, shown in figure \ref{fig:doc2vec}, we can see that few results of the queries tend to stay close.
+In this image there are some cluster with more queries. The most well defined cluster is \emph{`Gather gpu device info'}, as in the previous plot.
+The sparseness of the data reflects the low precision, which is lower than the LSI. This is reflected in the plot. 
 
 \begin{figure}[h]
 \centering
