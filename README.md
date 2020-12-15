@@ -14,5 +14,4 @@ Search data:
 * `python3 src/search_data.py "query"`
 
 Evaluate:
-* `python3 src/prec_recall.pylls  path_to_ground_truth`
-
+* `python3 src/prec_recall.py path_to_ground_truth`
