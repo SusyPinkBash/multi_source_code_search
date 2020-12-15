@@ -216,7 +216,7 @@ def create_doc2vec_model(corpus):
 
 def create_result_dataframe(queries_dictionary, df):
     for key, values in queries_dictionary.items():
-        for index in sorted(values):
+        for index in values:
             row = df.iloc[index]
             yield [row["name"], row["file"], row["line"], row["type"], row["comment"], key]
 
