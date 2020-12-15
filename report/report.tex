@@ -114,7 +114,8 @@ To show the results we run this part of the project with the query:\\
 % 2 : comment results 
 The correct document is \texttt{PastaAnalyzeVisitor} with path \texttt{../tensorflow/tensorflow/tools/\\compatibility/ast\_edits.py}.\\
 Figure \ref{fig:Part2} show the result of the given query.\\
-As we can see in the image all search engine find the correct result. Frequency, TF-IDF and LSI find it as the first result. Doc2Vec finds the correct result as second result. The first result is a class in the same file but named \texttt{APIChangeSpec} and with a different comment. This result is found only by this search engine. Doc2Vec has different results compared to the other search engines. Frequency and TF-IDF have the most similar results.
+As we can see in the image all search engine find the correct document as a first result. 
+We can see that Frequency and TF-IDF have three results in common, if we don't consider the correct result, but at different positions. 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.95\textwidth]{../res/part2.png}
@@ -134,19 +135,22 @@ To compute precision and recall we get the data of the results and the embedding
 
 \subsection{Results} % 3: comment results
 Table \ref{tab:Evaluation} show the statistics of precision and recall compared to the unique ground truth.
-We can see that the precision is low for all engines. The engine with the highest precision is \texttt{LSI}, which is the only score higher than $0.4$. The second highest precision is \texttt{TF-IDF}, followed by \texttt{Frequencies} and then \textbf{Doc2Vec}.
- We can say that almost all search engine have a similar precision.\\
-The recall is higher than the precision. The \texttt{TF-IDF} engine has a recall equal to $1$, which means that for each query the search engine has found the correct result in the top 5. The second highest recall is of \texttt{Frequencies} with score $0.9$. Both \texttt{LSI} and \texttt{Doc2Vec} have a recall of $0.8$.
+We can see that the precision is high for all engines except for one. The engine with the highest precision is \texttt{TF-IDF}, with score 8.85.
+The second highest precision is \texttt{Frequencies}, with score 0.83.
+The third highest precision is \texttt{LSI}, with score 0.80.
+The least precise search engine is \texttt{Doc2Vec} with score 0.55, which is the only score lower than $0.8$\\
+The recall is higher than the precision. The \texttt{TF-IDF} engine has a recall equal to $1$, which means that for each query the search engine has found the correct result in the top 5. The second highest recall is of \texttt{Frequencies} with score $0.9$. It is followed by \texttt{LSI} with a score of $0.9$. At last \texttt{Doc2Vec} has a recall of $0.6$.\\
+We can say that almost all search engine have similar scores for precision and recalls. The only exception is \texttt{Doc2Vec}.\\
 
 \begin{table}[h]
 \centering
 \begin{tabular}{| l r r |}
 \hline
 \textbf{Engine}	&  \textbf{Precision}	&  \textbf{Recall}	\\ \hline\hline
-Frequencies 		&	0.332	&	0.9	\\
-TD-IDF			&	0.365	&	1.0	\\
-LSI				&	0.403	&	0.8	\\
-Doc2Vec			&	0.323	&	0.8	\\ \hline
+Frequencies 		&	0.83	&	0.90	\\
+TD-IDF			&	0.85	&	1.00	\\
+LSI				&	0.80	&	0.80	\\
+Doc2Vec			&	0.55	&	0.60	\\ \hline
 \end{tabular}
 \captionof{table}{Statistics of the search engines}\label{tab:Evaluation}
 \end{table}
@@ -161,33 +165,47 @@ This file takes as argument the ground truth file.
 The first part of the execution is the same as the previous file. After the results are calculated, we use the embedding vectors, that we retrieved in the explanation above but we did not use. For vector we apply TSNE to produce 2D vectors composed of queries and the top 4 results.
 The plot is straight-forward: we create a dataframe with the information of x and y coordinates and print them of different hues. We use the library \texttt{seaborn} to create the charts and we then save them on disk.
 
-\subsection{Results} % TODO 4: comment results
-Figure \ref{fig:plots} shows the plots of the visualization of the queries. At first we notice that the LSI scatterplot tends to be more a bit compact, while the Doc2Vec scatterplot is more sparse. The optimal solution is to have defined clusters for each query. This does not happen in any of the two images.\\
+\subsection{Results} % 4: comment results
+Figures \ref{fig:lsi} and \ref{fig:doc2vec} shows the plots of the visualization of the queries. At first we notice that the LSI scatterplot tends to have better query clusters. The optimal solution is to have defined clusters for each query. This does not happen in any of the two images. There are queries that create clusters but this does not happen for all queries.\\
+
 \subsubsection{LSI}
-Analyzing the plot of LSI, shown in figure \ref{fig:lsi}, we can see that some results of the queries tend to stay close, but not completely. There are some clusters that are close.
-In most cases the cluster have different queries. The most well defined cluster is \emph{`Gather gpu device info'}, colored in purple. The sparseness of the data reflects the low precision.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.84\textwidth]{../res/lsi.png}
+\caption{Visualization of the queries using LSI}\label{fig:lsi}
+\end{figure}
+Analyzing the plot of LSI, shown in figure \ref{fig:lsi}, we can see that some results of the queries tend to stay close, but not completely. There are some well defined clusters composed of the same queries. Some examples are \emph{loss function}, \emph{The most basic RNN cell} and \emph{Reverses variable length slices}. 
+The queries of \emph{Convert a TensorShape to a list} and \emph{Decorator to define a function with a custom gradient} that tend to have some results that are somewhat close.
+
 
 \subsubsection{Doc2Vec}
-Analyzing the plot of Doc2Vec, shown in figure \ref{fig:doc2vec}, we can see that few results of the queries tend to stay close.
-In this image there are some cluster with more queries. The most well defined cluster is \emph{`Gather gpu device info'}, as in the previous plot.
-The sparseness of the data reflects the low precision, which is lower than the LSI. This is reflected in the plot. 
-
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
-\begin{subfigure}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{../res/lsi.png}
-\caption{Results of LSI}\label{fig:lsi}
-\end{subfigure}
-\hfil
-\begin{subfigure}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{../res/doc2vec.png}
-\caption{Results of Doc2Vec}\label{fig:doc2vec}
-\end{subfigure}
-\caption{Visualization of the plots of the queries}
-\label{fig:plots}
+\includegraphics[width=0.84\textwidth]{../res/doc2vec.png}
+\caption{Visualization of the queries using Doc2Vec}\label{fig:doc2vec}
 \end{figure}
+Analyzing the plot of Doc2Vec, shown in figure \ref{fig:doc2vec}, we can see that there are  results of the queries tend to stay closer than the previous plot.
+In this image there are some cluster that are well defined and are composed only of one query. Some queries are divided into two clusters close to each other.
+The most well defined cluster is \emph{`loss function'}, which was also well defined in the previous plot. 
+There is a cluster which is composed of five different queries.
+
+
+%\begin{figure}[h]
+%\centering
+%\begin{subfigure}[t]{0.4\textwidth}
+%\centering
+%\includegraphics[width=\textwidth]{../res/lsi.png}
+%\caption{Results of LSI}\label{fig:lsi}
+%\end{subfigure}
+%\hfil
+%\begin{subfigure}[t]{0.4\textwidth}
+%\centering
+%\includegraphics[width=\textwidth]{../res/doc2vec.png}
+%\caption{Results of Doc2Vec}\label{fig:doc2vec}
+%\end{subfigure}
+%\caption{Visualization of the plots of the queries}
+%\label{fig:plots}
+%\end{figure}
 
 \newpage
 \appendix
@@ -200,7 +218,7 @@ The sparseness of the data reflects the low precision, which is lower than the L
 \lstinputlisting{../src/search_data.py}
 \subsection{Evaluation of search engines and Visualisation of query results}
 \lstinputlisting{../src/prec_recall.py}
-
+\newpage
 
 \section{Bash Code} 
 \lstinputlisting[language=Bash]{../run.sh}

@@ -3,24 +3,24 @@
                    name &                                                                              file &  line &      type &                                                                  comment &   search \\
 \midrule
     PastaAnalyzeVisitor &                         ../tensorflow/tensorflow/tools/compatibility/ast\_edits.py &   815 &     class &  AST Visitor that looks for specific API usage without editing anything. &     FREQ \\
- CompatV1ImportReplacer &                     ../tensorflow/tensorflow/tools/compatibility/tf\_upgrade\_v2.py &    72 &     class &           AST Visitor that replaces `import tensorflow.compat.v1 as tf`. &     FREQ \\
             CleanCopier &                        ../tensorflow/tensorflow/python/autograph/pyct/ast\_util.py &    30 &     class &                         NodeTransformer-like visitor that copies an AST. &     FREQ \\
+ CompatV1ImportReplacer &                     ../tensorflow/tensorflow/tools/compatibility/tf\_upgrade\_v2.py &    72 &     class &           AST Visitor that replaces `import tensorflow.compat.v1 as tf`. &     FREQ \\
         FunctionVisitor &  ../tensorflow/tensorflow/python/autograph/pyct/static\_analysis/type\_inference.py &   394 &     class &     AST visitor that applies type inference to each function separately. &     FREQ \\
             track\_usage &                             ../tensorflow/tensorflow/python/platform/analytics.py &    21 &  function &                                  No usage tracking for external library. &     FREQ \\
     PastaAnalyzeVisitor &                         ../tensorflow/tensorflow/tools/compatibility/ast\_edits.py &   815 &     class &  AST Visitor that looks for specific API usage without editing anything. &   TF-IDF \\
-       PublicAPIVisitor &                               ../tensorflow/tensorflow/tools/common/public\_api.py &    29 &     class &       Visitor to use with `traverse` to visit exactly the public TF API. &   TF-IDF \\
-            CleanCopier &                        ../tensorflow/tensorflow/python/autograph/pyct/ast\_util.py &    30 &     class &                         NodeTransformer-like visitor that copies an AST. &   TF-IDF \\
         FunctionVisitor &  ../tensorflow/tensorflow/python/autograph/pyct/static\_analysis/type\_inference.py &   394 &     class &     AST visitor that applies type inference to each function separately. &   TF-IDF \\
             track\_usage &                             ../tensorflow/tensorflow/python/platform/analytics.py &    21 &  function &                                  No usage tracking for external library. &   TF-IDF \\
+            CleanCopier &                        ../tensorflow/tensorflow/python/autograph/pyct/ast\_util.py &    30 &     class &                         NodeTransformer-like visitor that copies an AST. &   TF-IDF \\
+       PublicAPIVisitor &                               ../tensorflow/tensorflow/tools/common/public\_api.py &    29 &     class &       Visitor to use with `traverse` to visit exactly the public TF API. &   TF-IDF \\
     PastaAnalyzeVisitor &                         ../tensorflow/tensorflow/tools/compatibility/ast\_edits.py &   815 &     class &  AST Visitor that looks for specific API usage without editing anything. &      LSI \\
-        CountingVisitor &                        ../tensorflow/tensorflow/python/autograph/pyct/cfg\_test.py &    28 &     class &                                                                          &      LSI \\
                 matches &                        ../tensorflow/tensorflow/python/autograph/pyct/ast\_util.py &   214 &  function &                                           Basic pattern matcher for AST. &      LSI \\
-          concentration &                    ../tensorflow/tensorflow/python/ops/distributions/dirichlet.py &   213 &    method &            Concentration parameter; expected counts for that coordinate. &      LSI \\
+        CountingVisitor &                        ../tensorflow/tensorflow/python/autograph/pyct/cfg\_test.py &    28 &     class &                                                                          &      LSI \\
    ProfileOptionBuilder &                        ../tensorflow/tensorflow/python/profiler/option\_builder.py &    27 &     class &                                        Option Builder for Profiling API. &      LSI \\
-          APIChangeSpec &                         ../tensorflow/tensorflow/tools/compatibility/ast\_edits.py &   192 &     class &              This class defines the transformations that need to happen. &  Doc2Vec \\
+          concentration &                    ../tensorflow/tensorflow/python/ops/distributions/dirichlet.py &   213 &    method &            Concentration parameter; expected counts for that coordinate. &      LSI \\
     PastaAnalyzeVisitor &                         ../tensorflow/tensorflow/tools/compatibility/ast\_edits.py &   815 &     class &  AST Visitor that looks for specific API usage without editing anything. &  Doc2Vec \\
-              Trackable &                         ../tensorflow/tensorflow/python/training/tracking/base.py &   537 &     class &       Base class for `Trackable` objects without automatic dependencies. &  Doc2Vec \\
-            check\_dtype &                ../tensorflow/tensorflow/python/ops/linalg/linear\_operator\_util.py &   139 &  function &                                      Check that arg.dtype == self.dtype. &  Doc2Vec \\
-   ProfileOptionBuilder &                        ../tensorflow/tensorflow/python/profiler/option\_builder.py &    27 &     class &                                        Option Builder for Profiling API. &  Doc2Vec \\
+          APIChangeSpec &                         ../tensorflow/tensorflow/tools/compatibility/ast\_edits.py &   192 &     class &              This class defines the transformations that need to happen. &  Doc2Vec \\
+                Profile &                           ../tensorflow/tensorflow/python/profiler/profiler\_v2.py &   181 &     class &                                             Context-manager profile API. &  Doc2Vec \\
+        TFAPIChangeSpec &              ../tensorflow/tensorflow/tools/compatibility/tf\_upgrade\_v2\_safety.py &    26 &     class &                      List of maps that describe what changed in the API. &  Doc2Vec \\
+               Profiler &                                 ../tensorflow/tensorflow/python/eager/profiler.py &   176 &     class &                                      Context-manager eager profiler api. &  Doc2Vec \\
 \bottomrule
 \end{tabular}

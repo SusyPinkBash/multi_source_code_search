@@ -111,10 +111,6 @@ def normalize_query(query):
     return query.strip().lower().split()
 
 
-def save_model(model, name):
-    save_data(model, 'model_' + name)
-
-
 def query_frequency(query, bow, dictionary):
     return filter_results(create_top_5_result_tuples(get_freq_model(bow, dictionary)[dictionary.doc2bow(query)]))
 
@@ -125,7 +121,7 @@ def get_freq_model(bow, dictionary):
 
 def create_freq_model(bow, dictionary):
     model = SparseMatrixSimilarity(bow, num_features=len(dictionary.token2id))
-    save_model(model, 'freq')
+    save_data(model, 'model_freq')
     return model
 
 
@@ -141,7 +137,7 @@ def get_tfidf_model(bow):
 
 def create_tfidf_model(bow):
     model = TfidfModel(bow)
-    save_model(model, 'tfidf')
+    save_data(model, 'model_tfidf')
     return model
 
 
@@ -171,7 +167,7 @@ def get_lsi_model(bow, dictionary):
 
 def create_lsi_model(bow, dictionary):
     model = LsiModel(bow, id2word=dictionary, num_topics=300)
-    save_model(model, 'lsi')
+    save_data(model, 'model_lsi')
     return model
 
 
@@ -214,7 +210,7 @@ def create_doc2vec_model(corpus):
     model = Doc2Vec(vector_size=300, min_count=2, epochs=77)
     model.build_vocab(corpus)
     model.train(corpus, total_examples=model.corpus_count, epochs=model.epochs)
-    save_model(model, 'doc2vec')
+    save_data(model, 'model_doc2vec')
     return model
 
 
@@ -235,4 +231,5 @@ if len(argv) < 2:
     print("Please give as input the query")
     exit(1)
 
+print("NOPE")
 start(argv[1])
