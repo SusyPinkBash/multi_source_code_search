@@ -65,7 +65,7 @@ def exists_data_files():
 
 
 def exists_file(name):
-    return path.exists('res/' + name + '.pkl')
+    return path.exists('res/pickle/' + name + '.pkl')
 
 
 def load_data_files():
@@ -73,11 +73,11 @@ def load_data_files():
 
 
 def save_data(data, name):
-    pkl.dump(data, open('res/' + name + '.pkl', "wb"), protocol=pkl.HIGHEST_PROTOCOL)
+    pkl.dump(data, open('res/pickle/' + name + '.pkl', "wb"), protocol=pkl.HIGHEST_PROTOCOL)
 
 
 def load_file(name):
-    return pkl.load(open('res/' + name + '.pkl', "rb"))
+    return pkl.load(open('res/pickle/' + name + '.pkl', "rb"))
 
 
 def split_space(text):
@@ -116,7 +116,7 @@ def save_model(model, name):
 
 
 def query_frequency(query, bow, dictionary):
-    return filter_results(get_freq_model(bow, dictionary)[dictionary.doc2bow(query)])
+    return filter_results(create_top_5_result_tuples(get_freq_model(bow, dictionary)[dictionary.doc2bow(query)]))
 
 
 def get_freq_model(bow, dictionary):
@@ -132,7 +132,7 @@ def create_freq_model(bow, dictionary):
 def query_tfidf(query, bow, dictionary):
     model = get_tfidf_model(bow)
     matrix = get_tfidf_matrix(model, bow, dictionary)
-    return filter_results(matrix[model[dictionary.doc2bow(query)]])
+    return filter_results(create_top_5_result_tuples(matrix[model[dictionary.doc2bow(query)]]))
 
 
 def get_tfidf_model(bow):
@@ -157,11 +157,12 @@ def create_tfidf_matrix(model, bow, dictionary):
 
 def query_lsi(query, bow, dictionary):
     model = get_lsi_model(bow, dictionary)
+    matrix = get_lsi_matrix(model, bow)
     vector = model[dictionary.doc2bow(query)]
-    result = abs(MatrixSimilarity(model[bow])[vector])
+    result = abs(matrix[vector])
     embedding = [[value for _, value in vector]] + [[value for _, value in model[bow][i]] for i, value in
                                                     sorted(enumerate(result), key=lambda x: x[1], reverse=True)[:5]]
-    return filter_results(result), embedding
+    return filter_results(create_top_5_result_tuples(result)), embedding
 
 
 def get_lsi_model(bow, dictionary):
@@ -174,8 +175,22 @@ def create_lsi_model(bow, dictionary):
     return model
 
 
-def filter_results(arrg):
-    return [i for i, v in sorted(enumerate(arrg), key=lambda x: x[1], reverse=True)[:5]]
+def get_lsi_matrix(model, bow):
+    return load_file('matrix_lsi') if exists_file('matrix_lsi') else create_lsi_matrix(model, bow)
+
+
+def create_lsi_matrix(model, bow):
+    matrix = MatrixSimilarity(model[bow])
+    save_data(matrix, 'matrix_lsi')
+    return matrix
+
+
+def create_top_5_result_tuples(arrg):
+    return sorted(enumerate(arrg), key=lambda x: x[1], reverse=True)[:5]
+
+
+def filter_results(tuples):
+    return [i for i, v in tuples]
 
 
 def query_doc2vec(query, corpus):
